@@ -1,0 +1,5 @@
+﻿source_id,organization,source_url,content_type,original_language,complaint_text_available,license_verified,privacy_reviewed,status,next_action
+SRC001,GHMC,https://www.ghmc.gov.in/,official grievance service,unknown,unknown,no,no,candidate,Request authorized access to anonymized complaint records
+SRC002,Telangana Open Data Portal,https://data.telangana.gov.in/,open data catalog,unknown,unknown,no,no,candidate,Search catalog and verify candidate datasets
+SRC003,Open Government Data Platform India,https://www.data.gov.in/,open data catalog,unknown,unknown,no,no,candidate,Search for Hyderabad and Telangana municipal datasets
+SRC004,IIIT Hyderabad Sentiraama,https://ltrc.iiit.ac.in/showfile.php?filename=downloads%2Fsentiraama%2F,Telugu NLP corpus,Telugu,yes,review required,not applicable,supplementary,Review license and research suitability

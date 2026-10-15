@@ -1,0 +1,39 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Research data: never commit datasets
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/external/*
+!data/external/.gitkeep
+
+# Generated artifacts
+reports/generated/
+outputs/
+checkpoints/
+models/
+*.joblib
+*.pkl
+
+# Editor and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
