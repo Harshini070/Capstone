@@ -1,0 +1,7 @@
+﻿project_name: Grevience_Hub
+research_name: GrievanceHub
+target_language: Telugu
+target_city: Hyderabad
+target_municipality: GHMC
+initial_modality: text
+project_phase: corpus_source_discovery
