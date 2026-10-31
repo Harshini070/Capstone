@@ -1,0 +1,56 @@
+﻿{
+    "report_version":  "1.1",
+    "generated_at_utc":  "2026-10-31T16:12:37.7632686Z",
+    "source_provenance":  {
+                              "dataset":  "I Change My City Complaints Log (2019–2022)",
+                              "publisher":  "OpenCity",
+                              "underlying_source":  "Janaagraha I Change My City",
+                              "geographic_scope":  "Bengaluru",
+                              "verified_ghmc_origin":  false,
+                              "original_records":  16071,
+                              "original_fields":  17
+                          },
+    "translation":  {
+                        "model":  "ai4bharat/indictrans2-en-indic-dist-200M",
+                        "provider":  "AI4Bharat",
+                        "direction":  "English (eng_Latn) to Telugu (tel_Telu)",
+                        "translation_records":  28959,
+                        "translated_status_records":  28959,
+                        "empty_translations":  0,
+                        "human_review_pending":  28959
+                    },
+    "reconstruction":  {
+                           "records":  16071,
+                           "both_fields_matched":  16071,
+                           "empty_telugu_titles":  0,
+                           "empty_telugu_descriptions":  0
+                       },
+    "translation_quality":  {
+                                "flagged_translation_entries":  826,
+                                "unique_flagged_source_strings":  796,
+                                "no_rule_based_flag_entries":  28133,
+                                "quarantined_translation_entries":  44,
+                                "unique_quarantined_source_strings":  43
+                            },
+    "complaint_level_impact":  {
+                                   "total_complaints":  16071,
+                                   "complaints_with_flagged_fields":  734,
+                                   "complaints_without_flagged_fields":  15337,
+                                   "complaints_with_both_fields_flagged":  105,
+                                   "complaints_with_quarantined_fields":  43,
+                                   "complaints_without_quarantined_fields":  16028
+                               },
+    "provenance_discrepancy":  {
+                                   "earlier_trace_affected_records":  38,
+                                   "current_reconciliation_affected_records":  43,
+                                   "earlier_trace_translation_entries":  38,
+                                   "quarantine_translation_entries":  44,
+                                   "quarantine_description_entries":  43,
+                                   "quarantine_title_entries":  1,
+                                   "severe_trace_entries_in_quarantine":  38,
+                                   "complaints_with_both_fields_quarantined":  1,
+                                   "status":  "RECONCILED_RECORD_LEVEL",
+                                   "explanation":  "The earlier trace covered 38 severe description translations, all included in the broader 44-entry quarantine. The quarantine affects 43 unique complaints because one complaint has both fields quarantined."
+                               },
+    "release_decision":  "BLOCKED_PENDING_REVIEW"
+}
