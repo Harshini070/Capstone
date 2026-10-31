@@ -1,46 +1,63 @@
 ﻿import csv
+import json
 from pathlib import Path
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "data" / "external" / "bengaluru_complaints.csv"
-TRANSLATIONS = ROOT / "data" / "interim" / "telugu_translation_queue.csv"
-MAPPINGS = ROOT / "data" / "interim" / "category_mapping_review_v3.csv"
-OUTPUT = ROOT / "data" / "processed" / "translated_bengaluru_experimental.csv"
 
-def load_csv(path):
-    for encoding in ("utf-8-sig", "cp1252", "utf-8"):
-        try:
-            with path.open("r", encoding=encoding, newline="") as f:
-                return list(csv.DictReader(f))
-        except UnicodeDecodeError:
-            continue
-    raise UnicodeError(f"Cannot decode {path}")
+SOURCE = ROOT / "data/processed/bengaluru_complaints_telugu_reconstructed.csv"
+REGISTRY = ROOT / "configs/taxonomy_mapping_provisional_v1.json"
+OUTPUT = ROOT / "data/processed/translated_bengaluru_experimental_v1.csv"
+
+def norm(value):
+    return " ".join(str(value or "").strip().casefold().split())
+
+def norm_id(value):
+    value = str(value or "").strip()
+    if not value:
+        return ""
+    try:
+        number = float(value)
+        if number.is_integer():
+            return str(int(number))
+    except ValueError:
+        pass
+    return value
+
+def has_telugu(value):
+    return any("\u0c00" <= ch <= "\u0c7f" for ch in str(value or ""))
+
+def all_question_marks(value):
+    value = str(value or "").strip()
+    return bool(value) and all(ch == "?" for ch in value)
 
 def main():
-    for path in (SOURCE, TRANSLATIONS, MAPPINGS):
+    for path in (SOURCE, REGISTRY):
         if not path.exists():
-            raise FileNotFoundError(f"Required file missing: {path}")
+            raise FileNotFoundError(path)
 
-    source = load_csv(SOURCE)
-    translations = load_csv(TRANSLATIONS)
-    mappings = load_csv(MAPPINGS)
-
-    mapping_by_label = {}
-    for row in mappings:
-        label = (row.get("source_category_title") or "").strip()
-        if label:
-            mapping_by_label[label] = row
-
-    translation_by_key = {}
-    for row in translations:
-        key = (
-            row.get("source_field", ""),
-            (row.get("source_text") or "").strip(),
+    if OUTPUT.exists():
+        raise FileExistsError(
+            f"Refusing to overwrite existing output: {OUTPUT}"
         )
-        translation_by_key[key] = row
+
+    with SOURCE.open("r", encoding="utf-8-sig", newline="") as f:
+        source_rows = list(csv.DictReader(f))
+
+    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    mappings = registry["mappings"]
+
+    lookup = {
+        (
+            norm_id(m["source_category_id"]),
+            norm(m["source_category_title"])
+        ): m
+        for m in mappings
+    }
 
     output_fields = [
-        "source_record_index",
+        "record_id",
+        "source_record_id",
         "source_city",
         "target_city",
         "dataset_type",
@@ -50,69 +67,166 @@ def main():
         "telugu_description",
         "source_category_id",
         "source_category_title",
-        "proposed_target_category_code",
+        "target_category_code",
+        "target_category",
         "mapping_status",
+        "mapping_rationale",
         "source_ward_id",
         "source_ward_title",
         "source_location",
         "source_address",
         "source_latitude",
         "source_longitude",
-        "translation_title_status",
-        "translation_description_status",
+        "title_translation_match_status",
+        "description_translation_match_status",
+        "translation_reconstruction_status",
+        "title_has_telugu_script",
+        "description_has_telugu_script",
+        "title_all_question_marks",
+        "description_all_question_marks",
+        "translation_quality_status",
+        "experimental_candidate",
+        "exclusion_reason",
+        "human_review_required",
+        "release_status"
     ]
 
+    counts = {
+        "total": 0,
+        "mapped": 0,
+        "unknown": 0,
+        "manual": 0,
+        "pending": 0,
+        "translation_quarantine": 0,
+        "no_telugu_script": 0,
+        "candidates": 0
+    }
+
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    missing_translation = 0
-    missing_mapping = 0
 
     with OUTPUT.open("w", encoding="utf-8-sig", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=output_fields)
         writer.writeheader()
 
-        for index, row in enumerate(source, start=1):
-            title = (row.get("title") or "").strip()
-            description = (row.get("description") or "").strip()
+        for index, row in enumerate(source_rows, start=1):
+            title_te = str(row.get("title_telugu") or "").strip()
+            desc_te = str(row.get("description_telugu") or "").strip()
 
-            title_translation = translation_by_key.get(("title", title), {})
-            desc_translation = translation_by_key.get(("description", description), {})
-            category = (row.get("category_title") or "").strip()
-            mapping = mapping_by_label.get(category, {})
+            key = (
+                norm_id(row.get("category_id")),
+                norm(row.get("category_title"))
+            )
+            mapping = lookup.get(key)
 
-            if not title_translation.get("telugu_translation") or not desc_translation.get("telugu_translation"):
-                missing_translation += 1
+            title_bad = all_question_marks(title_te)
+            desc_bad = all_question_marks(desc_te)
+
+            title_script = has_telugu(title_te)
+            desc_script = has_telugu(desc_te)
+
+            if mapping:
+                counts["mapped"] += 1
+                status = mapping["mapping_status"]
+                target_code = mapping["proposed_target_category_code"]
+                target_name = mapping["proposed_target_category"]
+                rationale = mapping["reviewer_notes"]
+
+                if status == "PENDING_HUMAN_REVIEW":
+                    counts["pending"] += 1
+                elif status == "MANUAL_REVIEW_REQUIRED":
+                    counts["manual"] += 1
+            else:
+                counts["unknown"] += 1
+                status = "UNCLASSIFIED"
+                target_code = "UNKNOWN_SOURCE_CATEGORY"
+                target_name = "Unknown Source Category"
+                rationale = "Missing source category; no inference performed."
+
+            reasons = []
+
             if not mapping:
-                missing_mapping += 1
+                reasons.append("UNKNOWN_SOURCE_CATEGORY")
+            elif status == "MANUAL_REVIEW_REQUIRED":
+                reasons.append("MANUAL_REVIEW_REQUIRED")
+
+            if title_bad:
+                reasons.append("TITLE_ALL_QUESTION_MARKS")
+            if desc_bad:
+                reasons.append("DESCRIPTION_ALL_QUESTION_MARKS")
+
+            if title_bad or desc_bad:
+                counts["translation_quarantine"] += 1
+
+            if not title_script or not desc_script:
+                reasons.append("TELUGU_SCRIPT_REVIEW_REQUIRED")
+                counts["no_telugu_script"] += 1
+
+            candidate = (
+                mapping is not None
+                and status == "PENDING_HUMAN_REVIEW"
+                and title_script
+                and desc_script
+                and not title_bad
+                and not desc_bad
+            )
+
+            if candidate:
+                counts["candidates"] += 1
+
+            if title_bad or desc_bad:
+                quality = "QUARANTINE_INVALID_TRANSLATION"
+            elif not title_script or not desc_script:
+                quality = "HUMAN_REVIEW_NO_TELUGU_SCRIPT"
+            else:
+                quality = "SCRIPT_CHECK_PASSED_PENDING_HUMAN_REVIEW"
+
+            counts["total"] += 1
 
             writer.writerow({
-                "source_record_index": index,
+                "record_id": f"BG-TEL-{index:05d}",
+                "source_record_id": row.get("source_row_id", ""),
                 "source_city": "Bengaluru",
-                "target_city": "Hyderabad (experimental adaptation; not verified)",
-                "dataset_type": "Translated Bengaluru-derived experimental data; not authentic GHMC complaints",
-                "source_title": title,
-                "source_description": description,
-                "telugu_title": title_translation.get("telugu_translation", ""),
-                "telugu_description": desc_translation.get("telugu_translation", ""),
+                "target_city": "Hyderabad (intended application context; not source geography)",
+                "dataset_type": "TRANSLATED_BENGALURU_EXPERIMENTAL_BENCHMARK",
+                "source_title": row.get("title", ""),
+                "source_description": row.get("description", ""),
+                "telugu_title": title_te,
+                "telugu_description": desc_te,
                 "source_category_id": row.get("category_id", ""),
-                "source_category_title": category,
-                "proposed_target_category_code": mapping.get("proposed_target_category_code", ""),
-                "mapping_status": mapping.get("mapping_status", "MISSING_MAPPING"),
+                "source_category_title": row.get("category_title", ""),
+                "target_category_code": target_code,
+                "target_category": target_name,
+                "mapping_status": status,
+                "mapping_rationale": rationale,
                 "source_ward_id": row.get("ward_id", ""),
                 "source_ward_title": row.get("ward_title", ""),
                 "source_location": row.get("location", ""),
                 "source_address": row.get("address", ""),
                 "source_latitude": row.get("latitude", ""),
                 "source_longitude": row.get("longitude", ""),
-                "translation_title_status": title_translation.get("review_status", "PENDING"),
-                "translation_description_status": desc_translation.get("review_status", "PENDING"),
+                "title_translation_match_status": row.get("title_translation_match_status", ""),
+                "description_translation_match_status": row.get("description_translation_match_status", ""),
+                "translation_reconstruction_status": row.get("translation_reconstruction_status", ""),
+                "title_has_telugu_script": title_script,
+                "description_has_telugu_script": desc_script,
+                "title_all_question_marks": title_bad,
+                "description_all_question_marks": desc_bad,
+                "translation_quality_status": quality,
+                "experimental_candidate": candidate,
+                "exclusion_reason": ";".join(reasons),
+                "human_review_required": True,
+                "release_status": "HOLD"
             })
 
-    print(f"Experimental output written: {OUTPUT.relative_to(ROOT)}")
-    print(f"Source records processed: {len(source):,}")
-    print(f"Records with missing title or description translation: {missing_translation:,}")
-    print(f"Records without a category mapping row: {missing_mapping:,}")
-    print("Do not use this output as an authentic GHMC complaint dataset.")
-    print("Source addresses, wards and coordinates remain Bengaluru source fields.")
+    print("=== EXPERIMENTAL CORPUS BUILD ===")
+    print(f"Output: {OUTPUT.relative_to(ROOT)}")
+    for key, value in counts.items():
+        print(f"{key}: {value}")
+
+    print("\nAll records retained.")
+    print("No source records modified.")
+    print("No records approved for public or production release.")
+    print("Experimental candidates are provisional, not validated training data.")
 
 if __name__ == "__main__":
     main()

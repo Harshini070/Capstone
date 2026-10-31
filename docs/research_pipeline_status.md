@@ -1,85 +1,138 @@
 ﻿# GrievanceHub Research Pipeline Status
 
-## Project objective
+**Last updated:** 2026-10-31
+**Project status:** Experimental data preparation completed; research validation ongoing.
 
-GrievanceHub is a modular research framework for Telugu-language
-municipal complaint management. The intended target is authentic
-Telugu complaint data relevant to Hyderabad and GHMC.
+## 1. Project objective
 
-## Experimental source dataset
+GrievanceHub is a modular, Telugu-first framework for municipal complaint management. The intended target domain is Hyderabad and GHMC. The initial implementation is text-only.
 
-The current experimental source is the I Change My City dataset
-(2019–2022), obtained through OpenCity. The source contains
-Bengaluru-related civic complaints.
+The current experimental source is Bengaluru-origin data translated from English into Telugu. It is not authentic Hyderabad/GHMC complaint data.
 
-Source resource:
-https://data.opencity.in/dataset/i-change-my-city-data/resource/a60abf5c-3a15-4967-af32-c3074248580f
+## 2. Source and translation
 
-The resource lists Creative Commons Attribution-ShareAlike 2.0.
-Redistribution and derivative-work obligations still require review.
+- Source: I Change My City Complaints Log (2019–2022), OpenCity.
+- Geographic origin: Bengaluru.
+- Original records: 16,071.
+- Original fields: 17.
+- Unique English title/description strings translated: 28,959.
+- Model: AI4Bharat IndicTrans2 (`ai4bharat/indictrans2-en-indic-dist-200M`).
+- Direction: English (`eng_Latn`) to Telugu (`tel_Telu`).
+- Reconstructed records: 16,071.
+- Structurally matched title/description cells: 32,142.
+- Original source-field mismatches: 0.
 
-The experimental dataset must not be described as authentic
-Hyderabad/GHMC Telugu complaint data.
+Structural reconstruction does not establish semantic translation accuracy.
 
-## Translation pipeline
+## 3. Translation-quality review
 
-- Model: AI4Bharat IndicTrans2
-- Model identifier: ai4bharat/indictrans2-en-indic-dist-200M
-- Language direction: English (eng_Latn) to Telugu (tel_Telu)
-- Unique source strings processed: 28,959
-- Source records reconstructed: 16,071
-- Title and description cells structurally matched: 32,142
-- Translation semantic review: pending
+- Translation review queue: 28,959 entries.
+- Flagged entries: 826.
+- Quarantine entries: 44.
+- Quarantine entries affect 43 unique complaints: 43 descriptions and one title, with one complaint having both fields quarantined.
+- The earlier severe trace of 38 description entries is fully contained in the 43 quarantined descriptions.
+- Records with no Telugu script in at least one text field: 69.
 
-Structural matching verifies reconstruction, not translation accuracy.
+These are automated screening results. Human semantic review remains pending.
 
-## Quality and privacy controls
+## 4. Taxonomy mapping
 
-Automated translation screening flagged 120 records for review.
-These are heuristic flags, not confirmed translation errors.
+The provisional registry contains:
 
-A separate public-release candidate was created with selected
-location and source-identification fields excluded. Regex-based
-phone and email screening passed after masking.
+- 45 source-category mappings.
+- 16,039 records covered by proposed mappings.
+- 32 records with unknown source categories.
+- 42 mappings pending human review.
+- 3 mappings requiring manual review.
+- 358 records affected by manual-review mappings.
+- 237 subcategory mappings pending review.
 
-Regex screening does not prove anonymization. Contextual privacy
-review, semantic review, source-permission assessment, and release
-approval remain outstanding.
+Registry status: `PROVISIONAL_NOT_APPROVED`.
 
-## Local research scripts
+Category-level mapping proposals are not validated ground truth. The 32 unknown records remain unclassified.
 
-The repository contains scripts for:
-- Source dataset inspection
-- Taxonomy inventory construction
-- Taxonomy mapping proposals and review finalization
-- Translation queue preparation and validation
-- Telugu translation
-- Experimental corpus reconstruction
+## 5. Experimental corpus
 
-The scripts compile successfully under the currently tested
-Python 3.11.9 environment. Compilation does not establish runtime
-correctness or reproducibility.
+The experimental corpus contains 16,071 records.
 
-The local IndicTransToolkit import currently fails with the installed
-Transformers package. Local translation inference is therefore not
-verified. The completed Colab translation output should not be
-overwritten or regenerated as part of this repository review.
+| Measure | Count |
+|---|---:|
+| Proposed mapped records | 16,039 |
+| Unknown source category | 32 |
+| Manual-review mapping records | 358 |
+| Provisional candidates before privacy hold | 15,613 |
+| Translation quarantine complaints | 43 |
+| Records with no Telugu script in at least one field | 69 |
 
-## Data handling
+Exclusion groups overlap. Their counts must not be added to calculate unique excluded records.
 
-- Keep raw, interim, processed, and private research data out of Git.
-- Do not commit complaint-level translation files or review queues.
-- Commit reusable source code and reviewed documentation only.
-- Inspect staged files and the staged diff before committing.
+All records remain on release hold.
 
-## Current release decision
+## 6. Privacy screening
 
-Public release: NOT APPROVED.
+Regex screening covered source and Telugu titles/descriptions, location, and address.
 
-Outstanding requirements:
+- Unique affected records: 257.
+- Affected provisional candidates: 239.
+- Candidate IDs placed on manual-review hold: 239.
+- Privacy clearance granted: 0.
+
+Regex matches are not confirmed personal information. No regex match does not establish anonymization.
+
+## 7. Text-only derivative
+
+Output: `data/processed/translated_bengaluru_text_only_unflagged_v1.csv`
+
+- Records: 15,374.
+- Columns: 22.
+- English and Telugu title/description retained.
+- Ward identifiers, ward names, location, address, latitude, and longitude excluded.
+- Privacy-held candidate IDs excluded.
+- Records with no configured regex matches: 15,374.
+- Manual privacy clearance: 0.
+- Approved training records: 0.
+- Release status: `HOLD`.
+
+The derivative is a provisional research artifact, not an approved training or public-release dataset.
+
+## 8. Validation status
+
+The experimental corpus validator passed its recorded structural checks.
+
+The text-only derivative validator passed its recorded checks for row count, unique IDs, source traceability, privacy exclusions, text preservation, absence of location metadata, pending mapping status, and release holds.
+
+These checks do not prove translation correctness, label validity, complete privacy protection, or legal permission.
+
+## 9. Outstanding work
+
 1. Human semantic review of translations.
-2. Contextual privacy review.
-3. Confirmation of source licence and derivative redistribution terms.
-4. Documented project or supervisor approval.
-5. Acquisition and validation of authentic Telugu municipal complaints
-   before making claims about GHMC Telugu corpus coverage.
+2. Human review and approval of taxonomy mappings.
+3. Contextual privacy review of candidate records.
+4. Source licence and derivative redistribution assessment.
+5. Research ethics and supervisor/project approval assessment.
+6. Authentic Telugu municipal complaint acquisition relevant to Hyderabad/GHMC.
+7. Define an approved research subset before model training.
+8. Conduct leakage-resistant baseline experiments only after the required review gates.
+
+## 10. Current decision
+
+- Experimental data preparation: completed.
+- Structural validation: passed.
+- Translation semantic validation: pending.
+- Taxonomy approval: pending.
+- Privacy clearance: not granted.
+- Training approval: not granted.
+- Public release: not approved.
+
+The current work demonstrates a reproducible experimental preparation pipeline. It does not establish deployment readiness or performance on authentic GHMC complaints.
+
+## 11. Source attribution
+
+Dataset: I Change My City Complaints Log (2019–2022)
+Platform: OpenCity
+Underlying source: Janaagraha I Change My City
+Resource: https://data.opencity.in/dataset/i-change-my-city-data/resource/a60abf5c-3a15-4967-af32-c3074248580f
+Listed licence: Creative Commons Attribution-ShareAlike 2.0 Generic
+Listed credits: Vivek Mathew and Haji Shariefullah
+
+Licence obligations and derivative redistribution permissions remain subject to review.
