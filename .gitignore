@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -37,3 +37,11 @@ models/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Temporary Sprint 1 package files
+_sprint1_package/
+GrievanceHub_Sprint1_Corpus_Preparation_Package.zip
+
+# Python-generated files
+__pycache__/
+*.py[cod]
