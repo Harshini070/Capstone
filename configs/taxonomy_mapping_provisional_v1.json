@@ -1,0 +1,492 @@
+{
+  "registry_name": "GrievanceHub Provisional Taxonomy Mapping",
+  "version": "1.0",
+  "created_at_utc": "2026-10-31T16:28:48.321278+00:00",
+  "registry_status": "PROVISIONAL_NOT_APPROVED",
+  "purpose": "Controlled experimental mapping of Bengaluru source complaint categories to provisional target labels.",
+  "target_project": {
+    "name": "GrievanceHub",
+    "city": "Hyderabad",
+    "municipality": "GHMC",
+    "language": "Telugu"
+  },
+  "source_dataset": {
+    "name": "I Change My City Complaints Log (2019-2022)",
+    "geographic_origin": "Bengaluru",
+    "record_count": 16071,
+    "note": "This dataset is not an authentic Hyderabad or GHMC complaint dataset."
+  },
+  "record_accounting": {
+    "total_source_records": 16071,
+    "records_with_category_proposals": 16039,
+    "records_with_unknown_source_category": 32,
+    "reconciled_total": 16071
+  },
+  "unknown_category_policy": {
+    "source_category_id": "NULL",
+    "source_category_title": "NULL",
+    "target_category_code": "UNKNOWN_SOURCE_CATEGORY",
+    "target_category": "Unknown Source Category",
+    "record_count": 32,
+    "mapping_status": "UNCLASSIFIED",
+    "rationale": "Source category is missing or represented by a placeholder. Do not infer a service category."
+  },
+  "review_policy": {
+    "approval_status": "No mappings are approved by this registry.",
+    "pending_status": "PENDING_HUMAN_REVIEW",
+    "manual_status": "MANUAL_REVIEW_REQUIRED",
+    "note": "Proposed labels may be used only in controlled experiments with mapping status retained. They must not be represented as validated ground truth."
+  },
+  "mappings": [
+    {
+      "source_category_id": "15",
+      "source_category_title": "Mobility - Roads, Footpaths and Infrastructure",
+      "source_record_count": 5072,
+      "proposed_target_category_code": "ROAD_INFRASTRUCTURE",
+      "proposed_target_category": "Roads and Footpaths",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "6",
+      "source_category_title": "Garbage and Unsanitary Practices",
+      "source_record_count": 3946,
+      "proposed_target_category_code": "SOLID_WASTE",
+      "proposed_target_category": "Solid Waste Management",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "21",
+      "source_category_title": "Traffic and Road Safety",
+      "source_record_count": 967,
+      "proposed_target_category_code": "TRAFFIC_SAFETY",
+      "proposed_target_category": "Traffic and Road Safety",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "708",
+      "source_category_title": "Yellow Spot",
+      "source_record_count": 948,
+      "proposed_target_category_code": "PUBLIC_SANITATION",
+      "proposed_target_category": "Public Sanitation and Hygiene",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "19",
+      "source_category_title": "Animal Husbandry",
+      "source_record_count": 859,
+      "proposed_target_category_code": "ANIMAL_SERVICES",
+      "proposed_target_category": "Animal Control and Services",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "470",
+      "source_category_title": "Street lighting",
+      "source_record_count": 807,
+      "proposed_target_category_code": "STREETLIGHT",
+      "proposed_target_category": "Street Lighting",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "470",
+      "source_category_title": "Streetlights",
+      "source_record_count": 693,
+      "proposed_target_category_code": "STREETLIGHT",
+      "proposed_target_category": "Street Lighting",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "11",
+      "source_category_title": "Pollution",
+      "source_record_count": 437,
+      "proposed_target_category_code": "POLLUTION",
+      "proposed_target_category": "Pollution and Environmental Nuisance",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "9",
+      "source_category_title": "Others",
+      "source_record_count": 346,
+      "proposed_target_category_code": "OTHER_REVIEW",
+      "proposed_target_category": "Other / Needs Review",
+      "proposal_basis": "Catch-all source category; do not force into a specific service",
+      "mapping_status": "MANUAL_REVIEW_REQUIRED",
+      "reviewer_notes": "Catch-all source category; do not force into a specific service"
+    },
+    {
+      "source_category_id": "23",
+      "source_category_title": "Water Supply and Services",
+      "source_record_count": 320,
+      "proposed_target_category_code": "WATER_SUPPLY",
+      "proposed_target_category": "Water Supply",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "472",
+      "source_category_title": "Sewerage Systems",
+      "source_record_count": 301,
+      "proposed_target_category_code": "SEWERAGE_DRAINAGE",
+      "proposed_target_category": "Sewerage and Drainage",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "4",
+      "source_category_title": "Electricity and Power Supply",
+      "source_record_count": 228,
+      "proposed_target_category_code": "ELECTRICITY",
+      "proposed_target_category": "Electricity and Power",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "2",
+      "source_category_title": "Crime and Safety",
+      "source_record_count": 143,
+      "proposed_target_category_code": "PUBLIC_SAFETY",
+      "proposed_target_category": "Public Safety and Crime",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "18",
+      "source_category_title": "Storm Water Drains",
+      "source_record_count": 138,
+      "proposed_target_category_code": "STORMWATER",
+      "proposed_target_category": "Stormwater and Flood Management",
+      "proposal_basis": "Manual review: preserve stormwater distinction",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": "Manual review: preserve stormwater distinction"
+    },
+    {
+      "source_category_id": "382",
+      "source_category_title": "Community Infrastructure and Services",
+      "source_record_count": 133,
+      "proposed_target_category_code": "PUBLIC_INFRASTRUCTURE",
+      "proposed_target_category": "Community and Public Infrastructure",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "22",
+      "source_category_title": "Parks & Recreation",
+      "source_record_count": 121,
+      "proposed_target_category_code": "PARKS_GREENSPACE",
+      "proposed_target_category": "Parks and Green Spaces",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "270",
+      "source_category_title": "Roads and Footpaths",
+      "source_record_count": 113,
+      "proposed_target_category_code": "ROAD_INFRASTRUCTURE",
+      "proposed_target_category": "Roads and Footpaths",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "473",
+      "source_category_title": "Trees and Saplings",
+      "source_record_count": 104,
+      "proposed_target_category_code": "PARKS_GREENSPACE",
+      "proposed_target_category": "Parks and Green Spaces",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "454",
+      "source_category_title": "Public Toilets",
+      "source_record_count": 61,
+      "proposed_target_category_code": "PUBLIC_SANITATION",
+      "proposed_target_category": "Public Sanitation and Hygiene",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "7",
+      "source_category_title": "Lakes",
+      "source_record_count": 54,
+      "proposed_target_category_code": "LAKES_WATERBODIES",
+      "proposed_target_category": "Lakes and Water Bodies",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "1",
+      "source_category_title": "Certificates",
+      "source_record_count": 53,
+      "proposed_target_category_code": "CIVIC_DOCUMENTS",
+      "proposed_target_category": "Certificates and Civic Documentation",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "205",
+      "source_category_title": "Sanitation",
+      "source_record_count": 39,
+      "proposed_target_category_code": "PUBLIC_SANITATION",
+      "proposed_target_category": "Public Sanitation and Hygiene",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "168",
+      "source_category_title": "Public Transport - BMTC",
+      "source_record_count": 35,
+      "proposed_target_category_code": "PUBLIC_TRANSPORT",
+      "proposed_target_category": "Public Transport",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "203",
+      "source_category_title": "Water Supply",
+      "source_record_count": 14,
+      "proposed_target_category_code": "WATER_SUPPLY",
+      "proposed_target_category": "Water Supply",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "15",
+      "source_category_title": "Mobility - Roads, Public transport",
+      "source_record_count": 12,
+      "proposed_target_category_code": "PUBLIC_TRANSPORT",
+      "proposed_target_category": "Public Transport",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "209",
+      "source_category_title": "Safety and Crime",
+      "source_record_count": 11,
+      "proposed_target_category_code": "PUBLIC_SAFETY",
+      "proposed_target_category": "Public Safety and Crime",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "543",
+      "source_category_title": "Covid 19",
+      "source_record_count": 11,
+      "proposed_target_category_code": "PUBLIC_HEALTH",
+      "proposed_target_category": "Public Health",
+      "proposal_basis": "Provisional classification; verify source meaning and project scope",
+      "mapping_status": "MANUAL_REVIEW_REQUIRED",
+      "reviewer_notes": "Provisional classification; verify source meaning and project scope"
+    },
+    {
+      "source_category_id": "5",
+      "source_category_title": "Fire Safety",
+      "source_record_count": 10,
+      "proposed_target_category_code": "FIRE_EMERGENCY",
+      "proposed_target_category": "Fire Safety and Emergency Response",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "207",
+      "source_category_title": "Electricity & Power",
+      "source_record_count": 8,
+      "proposed_target_category_code": "ELECTRICITY",
+      "proposed_target_category": "Electricity and Power",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "202",
+      "source_category_title": "Mobility - Roads, Public transport",
+      "source_record_count": 7,
+      "proposed_target_category_code": "PUBLIC_TRANSPORT",
+      "proposed_target_category": "Public Transport",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "268",
+      "source_category_title": "Water Supply",
+      "source_record_count": 7,
+      "proposed_target_category_code": "WATER_SUPPLY",
+      "proposed_target_category": "Water Supply",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "271",
+      "source_category_title": "Public transport (BMTC and Metro)",
+      "source_record_count": 7,
+      "proposed_target_category_code": "PUBLIC_TRANSPORT",
+      "proposed_target_category": "Public Transport",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "464",
+      "source_category_title": "Playgrounds",
+      "source_record_count": 7,
+      "proposed_target_category_code": "PARKS_GREENSPACE",
+      "proposed_target_category": "Parks and Green Spaces",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "273",
+      "source_category_title": "Power supply",
+      "source_record_count": 5,
+      "proposed_target_category_code": "ELECTRICITY",
+      "proposed_target_category": "Electricity and Power",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "564",
+      "source_category_title": "PWD",
+      "source_record_count": 5,
+      "proposed_target_category_code": "PUBLIC_INFRASTRUCTURE",
+      "proposed_target_category": "Community and Public Infrastructure",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "565",
+      "source_category_title": "Solid Waste Management",
+      "source_record_count": 5,
+      "proposed_target_category_code": "SOLID_WASTE",
+      "proposed_target_category": "Solid Waste Management",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "172",
+      "source_category_title": "Public Transport - KSRTC",
+      "source_record_count": 4,
+      "proposed_target_category_code": "PUBLIC_TRANSPORT",
+      "proposed_target_category": "Public Transport",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "478",
+      "source_category_title": "Pension",
+      "source_record_count": 1,
+      "proposed_target_category_code": "SOCIAL_WELFARE",
+      "proposed_target_category": "Social Welfare and Benefits",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "489",
+      "source_category_title": "Ration Card",
+      "source_record_count": 1,
+      "proposed_target_category_code": "SOCIAL_WELFARE",
+      "proposed_target_category": "Social Welfare and Benefits",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "497",
+      "source_category_title": "EMP Grievance Redressal",
+      "source_record_count": 1,
+      "proposed_target_category_code": "EMPLOYEE_GRIEVANCES",
+      "proposed_target_category": "Employee Grievances",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "555",
+      "source_category_title": "Animal Catcher",
+      "source_record_count": 1,
+      "proposed_target_category_code": "ANIMAL_SERVICES",
+      "proposed_target_category": "Animal Control and Services",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "562",
+      "source_category_title": "Fire Pollution",
+      "source_record_count": 1,
+      "proposed_target_category_code": "POLLUTION",
+      "proposed_target_category": "Pollution and Environmental Nuisance",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "637",
+      "source_category_title": "Waste Management",
+      "source_record_count": 1,
+      "proposed_target_category_code": "SOLID_WASTE",
+      "proposed_target_category": "Solid Waste Management",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "640",
+      "source_category_title": "Parks & Garden",
+      "source_record_count": 1,
+      "proposed_target_category_code": "PARKS_GREENSPACE",
+      "proposed_target_category": "Parks and Green Spaces",
+      "proposal_basis": "PHRASE_MATCH",
+      "mapping_status": "PENDING_HUMAN_REVIEW",
+      "reviewer_notes": ""
+    },
+    {
+      "source_category_id": "641",
+      "source_category_title": "Proibition & Sale of Tobacco products, Plastic carry bags",
+      "source_record_count": 1,
+      "proposed_target_category_code": "REGULATORY_ENFORCEMENT",
+      "proposed_target_category": "Regulatory and Enforcement Services",
+      "proposal_basis": "Mixed regulatory and plastic-restriction label; verify manually",
+      "mapping_status": "MANUAL_REVIEW_REQUIRED",
+      "reviewer_notes": "Mixed regulatory and plastic-restriction label; verify manually"
+    }
+  ]
+}

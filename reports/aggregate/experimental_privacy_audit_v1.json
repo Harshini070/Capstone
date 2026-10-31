@@ -1,0 +1,13 @@
+{
+  "audit_name": "GrievanceHub Experimental Corpus Privacy Audit",
+  "version": "1.0",
+  "generated_at_utc": "2026-10-31T17:02:12.426084+00:00",
+  "total_corpus_records": 16071,
+  "initial_provisional_candidates": 15613,
+  "unique_privacy_flagged_candidates": 239,
+  "temporarily_excluded_pending_review": 239,
+  "remaining_unflagged_provisional_candidates": 15374,
+  "privacy_clearance": "NOT_GRANTED",
+  "policy": "Regex-flagged candidates are held pending manual privacy review. Matches are not confirmed personal information.",
+  "source_corpus_modified": false
+}
