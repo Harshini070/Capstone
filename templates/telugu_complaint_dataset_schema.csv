@@ -1,0 +1,27 @@
+field,data_type,requirement,definition,rules
+record_id,string,Required,Internal unique ID; e.g. GH-TEL-000001,Never use a phone number or personal name as ID.
+complaint_text_te,string,Required,Original complaint text in Telugu script where available,Do not silently translate or rewrite source text.
+complaint_text_normalized_te,string,Optional,Conservative normalized Telugu text,Keep original text unchanged; document normalization.
+source_type,category,Required,PUBLIC_WEB / VOLUNTARY_SUBMISSION / SYNTHETIC_TEST / TRANSLATED_BENCHMARK,Only PUBLIC_WEB and VOLUNTARY_SUBMISSION can qualify for primary authentic corpus.
+source_name,string,Required,Name of source/platform or collection channel,Do not expose private submitter identity.
+source_url_or_reference,string,Conditional,Public URL or internal collection reference,"For private submissions, use a non-identifying reference."
+collection_date,date,Required,YYYY-MM-DD,"Date collected, not assumed complaint date."
+language_label,category,Required,TELUGU / MIXED_TELUGU / OTHER / UNCERTAIN,Annotate based on actual text.
+script_label,category,Required,TELUGU_SCRIPT / LATIN_SCRIPT / MIXED_SCRIPT / OTHER,Record script separately from language.
+hyderabad_relevance,category,Required,CONFIRMED / LIKELY / UNKNOWN / NOT_HYDERABAD,Do not infer from language alone.
+area_mentioned,string,Optional,Area/locality explicitly mentioned in text,Do not geocode or infer a precise address.
+category_id,string,Required after annotation,Taxonomy ID,Use UNASSIGNED until reviewed.
+subcategory_id,string,Optional,Taxonomy subcategory ID,Use UNASSIGNED if unclear.
+department_candidate,string,Optional,Likely responsible municipal/service department,"Prediction/annotation, not official routing confirmation."
+priority_label,category,Required after annotation,LOW / MEDIUM / HIGH / URGENT / UNASSIGNED,Use documented criteria; avoid unsupported urgency.
+contains_personal_data,boolean,Required,TRUE / FALSE / UNKNOWN,"If TRUE or UNKNOWN, hold from release pending review."
+pii_types,string,Optional,PHONE; PERSON_NAME; EMAIL; ADDRESS; VEHICLE_ID; OTHER,Do not copy sensitive values into this field.
+consent_status,category,Required,NOT_APPLICABLE_PUBLIC / NOT_APPLICABLE_SYNTHETIC / CONSENT_RECORDED / CONSENT_MISSING / WITHDRAWN,Private submissions require documented consent.
+license_or_terms,string,Required,"License, terms, or collection permission reference",Do not scrape restricted sources.
+annotation_status,category,Required,UNANNOTATED / ANNOTATED / DISAGREEMENT / ADJUDICATED,Maintain reviewer traceability.
+annotator_1,string,Optional,"Team member ID, not personal details",Use team codes such as A1.
+annotator_2,string,Optional,Second annotator ID,Independent annotation preferred.
+adjudication_note,string,Optional,Reason for resolving disagreement,Do not place PII here.
+split,category,Required,UNASSIGNED / TRAIN / VALIDATION / TEST,Split by source/duplicate group where feasible.
+release_status,category,Required,HOLD / INTERNAL_ONLY / APPROVED_FOR_RESEARCH,Default HOLD until privacy and provenance checks pass.
+notes,string,Optional,Non-sensitive operational notes,Do not store raw PII.

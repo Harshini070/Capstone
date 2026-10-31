@@ -1,0 +1,19 @@
+﻿category_id,category_name_en,scope_examples,department_candidate
+ROAD_INFRA,Roads and road infrastructure,"Potholes, damaged roads, resurfacing, road obstruction",TRANSPORT_ROADS
+FOOTPATH,Footpaths and pedestrian infrastructure,"Broken/blocked footpaths, unsafe pedestrian paths",TRANSPORT_ROADS
+STREETLIGHT,Street lighting,"Non-functional streetlights, dark public streets",ELECTRICAL_SERVICES
+SOLID_WASTE,Solid waste and garbage,"Garbage accumulation, collection, dumping, bins",SANITATION
+PUBLIC_SANITATION,Public sanitation and cleanliness,"Public toilets, unsanitary public spaces, open defecation reports",SANITATION
+DRAINAGE,Drainage and stormwater,"Blocked drains, waterlogging, stormwater drainage",ENGINEERING_DRAINAGE
+SEWERAGE,Sewerage and sewage,"Sewage overflow, manholes, sewer blockages",WATER_SEWERAGE
+WATER_SUPPLY,Water supply,"Water shortage, leakage, contaminated/irregular supply",WATER_SEWERAGE
+ELECTRICITY,Electricity infrastructure,"Power lines, exposed wires, local electricity hazards",ELECTRICAL_SERVICES
+TRAFFIC_SAFETY,Traffic and road safety,"Signals, signs, unsafe traffic conditions, road safety hazards",TRAFFIC_POLICE_OR_ROADS
+PUBLIC_HEALTH,Public health and nuisance,"Mosquito breeding, stagnant water, public nuisance affecting health",PUBLIC_HEALTH
+ANIMAL_SERVICES,Stray and animal-related civic issues,"Stray dogs, animal nuisance, carcass removal",VETERINARY_SERVICES
+POLLUTION,Environmental pollution,"Air, noise, water or other pollution complaints",ENVIRONMENT
+ENCROACHMENT,Public-space encroachment,"Encroachment on roads, footpaths, public land",TOWN_PLANNING_ENFORCEMENT
+PARKS_OPENSPACE,Parks and public open spaces,"Park maintenance, damaged public play/open spaces",HORTICULTURE_PARKS
+BUILDING_SAFETY,Building and construction-related civic issues,"Unsafe construction, debris, building-related public hazards",TOWN_PLANNING_ENFORCEMENT
+OTHER_REVIEW,Other / taxonomy review required,Municipal issue not covered by current draft,UNASSIGNED
+UNASSIGNED,Insufficient information,"Text too vague, incomplete or ambiguous to classify",UNASSIGNED
