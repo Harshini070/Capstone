@@ -1,0 +1,26 @@
+{
+  "dataset_name": "translated_bengaluru_preprocessed_v1.csv",
+  "input_dataset": "data\\processed\\translated_bengaluru_text_only_unflagged_v1.csv",
+  "records_before": 15374,
+  "records_after": 15374,
+  "record_count_preserved": true,
+  "unique_record_ids": 15374,
+  "duplicate_record_ids": 0,
+  "missing_title": 0,
+  "missing_description": 0,
+  "preprocessing": [
+    "Unicode NFC normalization",
+    "Whitespace normalization and trimming"
+  ],
+  "not_performed": [
+    "Punctuation deletion",
+    "Digit deletion",
+    "Latin-script deletion",
+    "Automatic truncation",
+    "Automatic complaint deletion",
+    "Label merging"
+  ],
+  "privacy_clearance": "NOT_GRANTED",
+  "training_approval": "NOT_GRANTED",
+  "release_status": "HOLD"
+}
