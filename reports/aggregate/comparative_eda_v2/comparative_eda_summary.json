@@ -1,0 +1,285 @@
+{
+  "purpose": "Aggregate comparative EDA; not a translation-quality certification.",
+  "source_provenance": "Bengaluru-origin source dataset; translated Telugu derivative, not authentic GHMC data.",
+  "datasets": [
+    {
+      "dataset": "original_english",
+      "rows": 16071,
+      "columns": 17,
+      "duplicate_full_rows": 33,
+      "missing_cells": 8581,
+      "missing_cells_pct": 3.14
+    },
+    {
+      "dataset": "reconstructed_telugu",
+      "rows": 16071,
+      "columns": 25,
+      "duplicate_full_rows": 0,
+      "missing_cells": 8581,
+      "missing_cells_pct": 2.14
+    },
+    {
+      "dataset": "experimental_telugu",
+      "rows": 16071,
+      "columns": 33,
+      "duplicate_full_rows": 0,
+      "missing_cells": 38445,
+      "missing_cells_pct": 7.25
+    },
+    {
+      "dataset": "text_only_unflagged",
+      "rows": 15374,
+      "columns": 22,
+      "duplicate_full_rows": 0,
+      "missing_cells": 15246,
+      "missing_cells_pct": 4.51
+    }
+  ],
+  "text_metrics": [
+    {
+      "field": "title",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 13579,
+      "exact_duplicate_excess": 2492,
+      "mean_characters": 44.12,
+      "median_characters": 42.0,
+      "max_characters": 190,
+      "mean_words": 7.52,
+      "median_words": 7.0,
+      "telugu_script_rows": 0,
+      "latin_script_rows": 16030,
+      "question_mark_rows": 93,
+      "url_pattern_rows": 4,
+      "telugu_script_pct": 0.0,
+      "dataset": "original_english",
+      "column": "title"
+    },
+    {
+      "field": "description",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 15346,
+      "exact_duplicate_excess": 725,
+      "mean_characters": 223.02,
+      "median_characters": 162.0,
+      "max_characters": 3736,
+      "mean_words": 39.51,
+      "median_words": 29.0,
+      "telugu_script_rows": 0,
+      "latin_script_rows": 16034,
+      "question_mark_rows": 593,
+      "url_pattern_rows": 50,
+      "telugu_script_pct": 0.0,
+      "dataset": "original_english",
+      "column": "description"
+    },
+    {
+      "field": "title",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 13052,
+      "exact_duplicate_excess": 3019,
+      "mean_characters": 237.73,
+      "median_characters": 279.0,
+      "max_characters": 900,
+      "mean_words": 6.48,
+      "median_words": 6.0,
+      "telugu_script_rows": 16016,
+      "latin_script_rows": 244,
+      "question_mark_rows": 91,
+      "url_pattern_rows": 3,
+      "telugu_script_pct": 99.66,
+      "dataset": "reconstructed_telugu",
+      "column": "title_telugu"
+    },
+    {
+      "field": "description",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 15240,
+      "exact_duplicate_excess": 831,
+      "mean_characters": 341.43,
+      "median_characters": 328.0,
+      "max_characters": 1180,
+      "mean_words": 29.26,
+      "median_words": 22.0,
+      "telugu_script_rows": 16003,
+      "latin_script_rows": 960,
+      "question_mark_rows": 698,
+      "url_pattern_rows": 32,
+      "telugu_script_pct": 99.58,
+      "dataset": "reconstructed_telugu",
+      "column": "description_telugu"
+    },
+    {
+      "field": "title",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 13052,
+      "exact_duplicate_excess": 3019,
+      "mean_characters": 237.73,
+      "median_characters": 279.0,
+      "max_characters": 900,
+      "mean_words": 6.48,
+      "median_words": 6.0,
+      "telugu_script_rows": 16016,
+      "latin_script_rows": 244,
+      "question_mark_rows": 91,
+      "url_pattern_rows": 3,
+      "telugu_script_pct": 99.66,
+      "dataset": "experimental_telugu",
+      "column": "telugu_title"
+    },
+    {
+      "field": "description",
+      "rows": 16071,
+      "missing_or_empty": 0,
+      "nonempty": 16071,
+      "unique_nonempty_texts": 15240,
+      "exact_duplicate_excess": 831,
+      "mean_characters": 341.43,
+      "median_characters": 328.0,
+      "max_characters": 1180,
+      "mean_words": 29.26,
+      "median_words": 22.0,
+      "telugu_script_rows": 16003,
+      "latin_script_rows": 960,
+      "question_mark_rows": 698,
+      "url_pattern_rows": 32,
+      "telugu_script_pct": 99.58,
+      "dataset": "experimental_telugu",
+      "column": "telugu_description"
+    },
+    {
+      "field": "title",
+      "rows": 15374,
+      "missing_or_empty": 0,
+      "nonempty": 15374,
+      "unique_nonempty_texts": 12480,
+      "exact_duplicate_excess": 2894,
+      "mean_characters": 238.7,
+      "median_characters": 279.0,
+      "max_characters": 900,
+      "mean_words": 6.5,
+      "median_words": 6.0,
+      "telugu_script_rows": 15374,
+      "latin_script_rows": 216,
+      "question_mark_rows": 63,
+      "url_pattern_rows": 0,
+      "telugu_script_pct": 100.0,
+      "dataset": "text_only_unflagged",
+      "column": "telugu_title"
+    },
+    {
+      "field": "description",
+      "rows": 15374,
+      "missing_or_empty": 0,
+      "nonempty": 15374,
+      "unique_nonempty_texts": 14606,
+      "exact_duplicate_excess": 768,
+      "mean_characters": 338.62,
+      "median_characters": 327.0,
+      "max_characters": 1180,
+      "mean_words": 28.72,
+      "median_words": 22.0,
+      "telugu_script_rows": 15374,
+      "latin_script_rows": 845,
+      "question_mark_rows": 616,
+      "url_pattern_rows": 0,
+      "telugu_script_pct": 100.0,
+      "dataset": "text_only_unflagged",
+      "column": "telugu_description"
+    }
+  ],
+  "paired_length_metrics": [
+    {
+      "dataset": "reconstructed_telugu",
+      "field": "title",
+      "paired_nonempty_rows": 16071,
+      "mean_source_characters": 44.12,
+      "mean_telugu_characters": 237.73,
+      "median_telugu_to_source_char_ratio": 4.848
+    },
+    {
+      "dataset": "reconstructed_telugu",
+      "field": "description",
+      "paired_nonempty_rows": 16071,
+      "mean_source_characters": 223.02,
+      "mean_telugu_characters": 341.43,
+      "median_telugu_to_source_char_ratio": 1.613
+    },
+    {
+      "dataset": "experimental_telugu",
+      "field": "title",
+      "paired_nonempty_rows": 16071,
+      "mean_source_characters": 44.12,
+      "mean_telugu_characters": 237.73,
+      "median_telugu_to_source_char_ratio": 4.848
+    },
+    {
+      "dataset": "experimental_telugu",
+      "field": "description",
+      "paired_nonempty_rows": 16071,
+      "mean_source_characters": 223.02,
+      "mean_telugu_characters": 341.43,
+      "median_telugu_to_source_char_ratio": 1.613
+    },
+    {
+      "dataset": "text_only_unflagged",
+      "field": "title",
+      "paired_nonempty_rows": 15374,
+      "mean_source_characters": 44.07,
+      "mean_telugu_characters": 238.7,
+      "median_telugu_to_source_char_ratio": 4.898
+    },
+    {
+      "dataset": "text_only_unflagged",
+      "field": "description",
+      "paired_nonempty_rows": 15374,
+      "mean_source_characters": 216.68,
+      "mean_telugu_characters": 338.62,
+      "median_telugu_to_source_char_ratio": 1.657
+    }
+  ],
+  "translation_table": {
+    "rows": 28959,
+    "unique_source_texts": 26772,
+    "translation_status_counts": {
+      "TRANSLATED": 28959
+    },
+    "review_status_counts": {
+      "PENDING_HUMAN_REVIEW": 28959
+    },
+    "telugu_script_rows": 28839
+  },
+  "retention": [
+    {
+      "dataset": "original_english",
+      "records": 16071,
+      "retention_vs_original_pct": 100.0
+    },
+    {
+      "dataset": "reconstructed_telugu",
+      "records": 16071,
+      "retention_vs_original_pct": 100.0
+    },
+    {
+      "dataset": "experimental_telugu",
+      "records": 16071,
+      "retention_vs_original_pct": 100.0
+    },
+    {
+      "dataset": "text_only_unflagged",
+      "records": 15374,
+      "retention_vs_original_pct": 95.66
+    }
+  ],
+  "output_directory": "reports/aggregate/comparative_eda_v2",
+  "privacy_note": "Only aggregate metrics are exported; complaint text and PII are not written to reports."
+}

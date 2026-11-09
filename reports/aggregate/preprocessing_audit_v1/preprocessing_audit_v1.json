@@ -1,0 +1,76 @@
+{
+  "experiment": "P1 Unicode NFC and whitespace normalization",
+  "source": "data\\processed\\bengaluru_complaints_telugu_reconstructed.csv",
+  "records": 16071,
+  "normalization": [
+    "Unicode NFC",
+    "Removal of selected invisible formatting characters",
+    "Whitespace collapse and trimming"
+  ],
+  "not_performed": [
+    "No punctuation deletion",
+    "No translation correction",
+    "No complaint deletion",
+    "No PII clearance",
+    "No training eligibility approval"
+  ],
+  "field_metrics": {
+    "english_title": {
+      "records": 16071,
+      "empty_before": 0,
+      "empty_after": 0,
+      "unicode_or_whitespace_changed": 759,
+      "mean_length_before": 44.17,
+      "mean_length_after": 44.12,
+      "unique_before": 13582,
+      "unique_after": 13579,
+      "telugu_script_after": 0,
+      "latin_script_after": 16030,
+      "repeated_period_rows": 4944,
+      "period_dominated_rows": 0
+    },
+    "english_description": {
+      "records": 16071,
+      "empty_before": 0,
+      "empty_after": 0,
+      "unicode_or_whitespace_changed": 5034,
+      "mean_length_before": 223.63,
+      "mean_length_after": 223.02,
+      "unique_before": 15377,
+      "unique_after": 15346,
+      "telugu_script_after": 0,
+      "latin_script_after": 16034,
+      "repeated_period_rows": 1116,
+      "period_dominated_rows": 0
+    },
+    "telugu_title": {
+      "records": 16071,
+      "empty_before": 0,
+      "empty_after": 0,
+      "unicode_or_whitespace_changed": 0,
+      "mean_length_before": 237.73,
+      "mean_length_after": 237.73,
+      "unique_before": 13052,
+      "unique_after": 13052,
+      "telugu_script_after": 16016,
+      "latin_script_after": 244,
+      "repeated_period_rows": 13426,
+      "period_dominated_rows": 12731
+    },
+    "telugu_description": {
+      "records": 16071,
+      "empty_before": 0,
+      "empty_after": 0,
+      "unicode_or_whitespace_changed": 0,
+      "mean_length_before": 341.43,
+      "mean_length_after": 341.43,
+      "unique_before": 15240,
+      "unique_after": 15240,
+      "telugu_script_after": 16003,
+      "latin_script_after": 960,
+      "repeated_period_rows": 8837,
+      "period_dominated_rows": 6641
+    }
+  },
+  "release_status": "HOLD_PENDING_TRANSLATION_AND_HUMAN_REVIEW"
+}

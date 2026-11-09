@@ -1,0 +1,11 @@
+{
+  "rows": 28959,
+  "unique_source_texts": 26772,
+  "translation_status_counts": {
+    "TRANSLATED": 28959
+  },
+  "review_status_counts": {
+    "PENDING_HUMAN_REVIEW": 28959
+  },
+  "telugu_script_rows": 28839
+}

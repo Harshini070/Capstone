@@ -1,0 +1,7 @@
+dataset,field,paired_nonempty_rows,mean_source_characters,mean_telugu_characters,median_telugu_to_source_char_ratio
+reconstructed_telugu,title,16071,44.12,237.73,4.848
+reconstructed_telugu,description,16071,223.02,341.43,1.613
+experimental_telugu,title,16071,44.12,237.73,4.848
+experimental_telugu,description,16071,223.02,341.43,1.613
+text_only_unflagged,title,15374,44.07,238.7,4.898
+text_only_unflagged,description,15374,216.68,338.62,1.657

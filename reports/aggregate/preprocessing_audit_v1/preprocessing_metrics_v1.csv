@@ -1,0 +1,5 @@
+field,records,empty_before,empty_after,unicode_or_whitespace_changed,mean_length_before,mean_length_after,unique_before,unique_after,telugu_script_after,latin_script_after,repeated_period_rows,period_dominated_rows
+english_title,16071,0,0,759,44.17,44.12,13582,13579,0,16030,4944,0
+english_description,16071,0,0,5034,223.63,223.02,15377,15346,0,16034,1116,0
+telugu_title,16071,0,0,0,237.73,237.73,13052,13052,16016,244,13426,12731
+telugu_description,16071,0,0,0,341.43,341.43,15240,15240,16003,960,8837,6641

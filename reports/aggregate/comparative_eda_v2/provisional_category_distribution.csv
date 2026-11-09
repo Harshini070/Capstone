@@ -1,0 +1,25 @@
+target_category_code,target_category,record_count
+ROAD_INFRASTRUCTURE,Roads and Footpaths,5185
+SOLID_WASTE,Solid Waste Management,3952
+STREETLIGHT,Street Lighting,1500
+PUBLIC_SANITATION,Public Sanitation and Hygiene,1048
+TRAFFIC_SAFETY,Traffic and Road Safety,967
+ANIMAL_SERVICES,Animal Control and Services,860
+POLLUTION,Pollution and Environmental Nuisance,438
+OTHER_REVIEW,Other / Needs Review,346
+WATER_SUPPLY,Water Supply,341
+SEWERAGE_DRAINAGE,Sewerage and Drainage,301
+ELECTRICITY,Electricity and Power,241
+PARKS_GREENSPACE,Parks and Green Spaces,233
+PUBLIC_SAFETY,Public Safety and Crime,154
+STORMWATER,Stormwater and Flood Management,138
+PUBLIC_INFRASTRUCTURE,Community and Public Infrastructure,138
+PUBLIC_TRANSPORT,Public Transport,65
+LAKES_WATERBODIES,Lakes and Water Bodies,54
+CIVIC_DOCUMENTS,Certificates and Civic Documentation,53
+UNKNOWN_SOURCE_CATEGORY,Unknown Source Category,32
+PUBLIC_HEALTH,Public Health,11
+FIRE_EMERGENCY,Fire Safety and Emergency Response,10
+SOCIAL_WELFARE,Social Welfare and Benefits,2
+EMPLOYEE_GRIEVANCES,Employee Grievances,1
+REGULATORY_ENFORCEMENT,Regulatory and Enforcement Services,1

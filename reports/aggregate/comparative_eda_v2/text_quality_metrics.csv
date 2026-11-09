@@ -1,0 +1,9 @@
+field,rows,missing_or_empty,nonempty,unique_nonempty_texts,exact_duplicate_excess,mean_characters,median_characters,max_characters,mean_words,median_words,telugu_script_rows,latin_script_rows,question_mark_rows,url_pattern_rows,telugu_script_pct,dataset,column
+title,16071,0,16071,13579,2492,44.12,42.0,190,7.52,7.0,0,16030,93,4,0.0,original_english,title
+description,16071,0,16071,15346,725,223.02,162.0,3736,39.51,29.0,0,16034,593,50,0.0,original_english,description
+title,16071,0,16071,13052,3019,237.73,279.0,900,6.48,6.0,16016,244,91,3,99.66,reconstructed_telugu,title_telugu
+description,16071,0,16071,15240,831,341.43,328.0,1180,29.26,22.0,16003,960,698,32,99.58,reconstructed_telugu,description_telugu
+title,16071,0,16071,13052,3019,237.73,279.0,900,6.48,6.0,16016,244,91,3,99.66,experimental_telugu,telugu_title
+description,16071,0,16071,15240,831,341.43,328.0,1180,29.26,22.0,16003,960,698,32,99.58,experimental_telugu,telugu_description
+title,15374,0,15374,12480,2894,238.7,279.0,900,6.5,6.0,15374,216,63,0,100.0,text_only_unflagged,telugu_title
+description,15374,0,15374,14606,768,338.62,327.0,1180,28.72,22.0,15374,845,616,0,100.0,text_only_unflagged,telugu_description

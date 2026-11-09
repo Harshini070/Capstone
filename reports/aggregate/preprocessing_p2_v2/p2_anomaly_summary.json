@@ -1,0 +1,73 @@
+{
+  "experiment": "P2 punctuation and formatting anomaly detection",
+  "source": "data\\processed\\bengaluru_complaints_telugu_reconstructed.csv",
+  "field_summaries": {
+    "telugu_title": {
+      "records": 16071,
+      "anomaly_counts": {
+        "empty": 0,
+        "has_telugu": 16016,
+        "has_latin": 244,
+        "repeated_punctuation": 13432,
+        "long_period_run": 12744,
+        "period_dominated": 12731,
+        "high_punctuation_density": 12757,
+        "repeated_word_sequence": 34,
+        "contains_url": 3,
+        "contains_control_character": 0,
+        "contains_invisible_character": 0,
+        "over_500_characters": 8
+      },
+      "mean_characters": 237.73,
+      "median_characters": 279.0,
+      "max_characters": 900,
+      "mean_punctuation_density": 0.6699,
+      "high_punctuation_density_row_fraction": 0.7938
+    },
+    "telugu_description": {
+      "records": 16071,
+      "anomaly_counts": {
+        "empty": 0,
+        "has_telugu": 16003,
+        "has_latin": 960,
+        "repeated_punctuation": 8946,
+        "long_period_run": 8432,
+        "period_dominated": 6641,
+        "high_punctuation_density": 6760,
+        "repeated_word_sequence": 68,
+        "contains_url": 32,
+        "contains_control_character": 0,
+        "contains_invisible_character": 0,
+        "over_500_characters": 1876
+      },
+      "mean_characters": 341.43,
+      "median_characters": 328.0,
+      "max_characters": 1180,
+      "mean_punctuation_density": 0.3591,
+      "high_punctuation_density_row_fraction": 0.4206
+    }
+  },
+  "record_overlap": {
+    "records": 16071,
+    "title_flagged": 13475,
+    "description_flagged": 10314,
+    "either_field_flagged": 14546,
+    "both_fields_flagged": 9243,
+    "neither_field_flagged": 1525
+  },
+  "methodology": {
+    "repeated_punctuation": "Two or more consecutive identical ASCII punctuation characters",
+    "long_period_run": "At least 10 consecutive ASCII periods",
+    "period_dominated": "At least 50 percent of code points are ASCII periods",
+    "high_punctuation_density": "At least 50 percent of code points are Unicode punctuation",
+    "repeated_word_sequence": "Repeated consecutive sequence of 2 to 7 whitespace-separated tokens",
+    "release_effect": "None; detection only"
+  },
+  "limitations": [
+    "Heuristic flags do not prove semantic translation errors.",
+    "Latin characters may be valid names, abbreviations or technical terms.",
+    "Punctuation thresholds are anomaly indicators, not automatic deletion rules.",
+    "No text or record-level identifiers are exported."
+  ],
+  "release_status": "HOLD_PENDING_TRANSLATION_QUALITY_REVIEW"
+}

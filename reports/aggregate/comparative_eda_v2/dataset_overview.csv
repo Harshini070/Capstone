@@ -1,0 +1,5 @@
+dataset,rows,columns,duplicate_full_rows,missing_cells,missing_cells_pct
+original_english,16071,17,33,8581,3.14
+reconstructed_telugu,16071,25,0,8581,2.14
+experimental_telugu,16071,33,0,38445,7.25
+text_only_unflagged,15374,22,0,15246,4.51
