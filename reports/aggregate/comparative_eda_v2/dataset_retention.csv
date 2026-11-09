@@ -1,0 +1,5 @@
+dataset,records,retention_vs_original_pct
+original_english,16071,100.0
+reconstructed_telugu,16071,100.0
+experimental_telugu,16071,100.0
+text_only_unflagged,15374,95.66
