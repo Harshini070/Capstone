@@ -45,3 +45,9 @@ GrievanceHub_Sprint1_Corpus_Preparation_Package.zip
 # Python-generated files
 __pycache__/
 *.py[cod]
+
+# Phase 4 local environments
+.venv_phase4_diagnostic/
+reports/aggregate/comparative_eda_v1/
+reports/aggregate/preprocessing_p2_v1/
+reports/aggregate/telugu_nlp_pipeline_v1/
