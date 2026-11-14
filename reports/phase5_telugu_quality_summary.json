@@ -1,0 +1,34 @@
+{
+    "assessment": "GrievanceHub Telugu Text Quality Assessment",
+    "input_file": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\processed\\translated_bengaluru_preprocessed_v2_cleaning_candidate.csv",
+    "total_records": 15374,
+    "cleaning_version": "phase5_v1",
+    "language_metrics": {
+        "titles_with_telugu": 15374,
+        "descriptions_with_telugu": 15374,
+        "records_with_telugu_in_both_fields": 15374,
+        "titles_with_latin_script": 216,
+        "descriptions_with_latin_script": 845
+    },
+    "content_quality": {
+        "identical_title_description": 2481,
+        "duplicate_text_group_records": 880,
+        "source_geography_reference_records": 1949,
+        "records_with_any_quality_flags": 5979,
+        "high_priority_review_records": 4389
+    },
+    "text_length": {
+        "average_title_characters": 48.07,
+        "median_title_characters": 47.0,
+        "average_description_characters": 219.88,
+        "median_description_characters": 167.0
+    },
+    "limitations": [
+        "Telugu Unicode detection does not prove grammatical correctness.",
+        "Latin script may represent names, acronyms, or code-switching.",
+        "Geographic references are review indicators, not automatic errors.",
+        "Duplicate text is not automatically invalid.",
+        "Translation accuracy requires human linguistic assessment.",
+        "This assessment does not approve privacy or training eligibility."
+    ]
+}

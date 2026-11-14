@@ -1,0 +1,17 @@
+{
+    "generated_at_utc": "2026-11-12T16:38:32.991083+00:00",
+    "population_records": 15374,
+    "categories": 20,
+    "review_sample_records": 522,
+    "maximum_sample_per_category": 30,
+    "random_seed": 42,
+    "sampling_method": "STRATIFIED_RANDOM",
+    "source_dataset_modified": false,
+    "training_eligibility_changed": false,
+    "review_status": "PENDING_HUMAN_REVIEW",
+    "files": {
+        "review_sample": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\interim\\human_review\\phase5_telugu_human_review_sample.csv",
+        "category_sampling": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\reports\\phase5_human_review_sampling.csv",
+        "guidelines": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\interim\\human_review\\phase5_human_review_guidelines.json"
+    }
+}

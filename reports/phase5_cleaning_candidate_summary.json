@@ -1,0 +1,19 @@
+{
+    "total_records": 15374,
+    "input_file": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\processed\\translated_bengaluru_preprocessed_v1.csv",
+    "output_file": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\processed\\translated_bengaluru_preprocessed_v2_cleaning_candidate.csv",
+    "source_modified": false,
+    "cleaning_rule": "Remove terminal sequences of five or more periods or hyphens. Preserve ordinary punctuation and all internal text.",
+    "columns": {
+        "telugu_title": {
+            "records_modified": 12252,
+            "records_unchanged": 3122
+        },
+        "telugu_description": {
+            "records_modified": 8226,
+            "records_unchanged": 7148
+        }
+    },
+    "training_eligibility_changed": false,
+    "approval_status": "CANDIDATE_REQUIRES_VALIDATION"
+}

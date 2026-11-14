@@ -1,0 +1,49 @@
+{
+    "audit_name": "GrievanceHub Phase 5 Training Eligibility Audit",
+    "generated_at_utc": "2026-11-12T16:29:41.128381+00:00",
+    "input_file": "C:\\Users\\Dell\\Desktop\\Grevience_Hub\\data\\processed\\translated_bengaluru_preprocessed_v1.csv",
+    "source_dataset_modified": false,
+    "total_records": 15374,
+    "eligible_records": 0,
+    "blocked_records": 15374,
+    "eligible_percentage": 0.0,
+    "gate_decision": "HOLD_NO_RECORDS_CLEARED_FOR_TRAINING",
+    "eligibility_policy": {
+        "privacy_screening_must_be_explicitly_approved": true,
+        "training_eligibility_must_be_approved": true,
+        "release_status_must_be_approved_or_released": true,
+        "model_training_eligibility_must_be_approved": true,
+        "title_and_description_must_be_present": true,
+        "category_must_not_be_unknown_or_review_only": true,
+        "long_dotted_filler_artifacts_are_blocking": true
+    },
+    "status_distributions": {
+        "privacy_screening_status": {
+            "NO_REGEX_MATCH_PENDING_MANUAL_REVIEW": 15374
+        },
+        "training_eligibility": {
+            "PROVISIONAL_NOT_CLEARED": 15374
+        },
+        "release_status": {
+            "HOLD": 15374
+        },
+        "model_training_eligibility": {
+            "NOT_CLEARED": 15374
+        }
+    },
+    "data_quality": {
+        "missing_title_or_description": 0,
+        "long_dotted_filler_artifacts": 13107,
+        "identical_title_description": 2475,
+        "records_in_duplicate_text_groups": 877,
+        "invalid_or_review_only_categories": 0
+    },
+    "category_count": 20,
+    "notes": [
+        "This audit does not approve or clear any record.",
+        "No regex match is not equivalent to privacy clearance.",
+        "A record passes only when all eligibility gates pass.",
+        "The source dataset is not modified.",
+        "This dataset is Bengaluru-derived and machine-translated; it must not be represented as authentic GHMC complaint data."
+    ]
+}

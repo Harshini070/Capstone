@@ -1,0 +1,26 @@
+{
+    "total_records": 15374,
+    "unique_records_modified": 13113,
+    "field_validation": {
+        "telugu_title": {
+            "original_preserved": true,
+            "cleaning_rule_followed_exactly": true,
+            "remaining_terminal_artifacts": 0,
+            "new_empty_fields": 0,
+            "change_flags_consistent": true,
+            "modified_records": 12252
+        },
+        "telugu_description": {
+            "original_preserved": true,
+            "cleaning_rule_followed_exactly": true,
+            "remaining_terminal_artifacts": 0,
+            "new_empty_fields": 0,
+            "change_flags_consistent": true,
+            "modified_records": 8226
+        }
+    },
+    "eligibility_fields_unchanged": true,
+    "validation_status": "PASS",
+    "errors": [],
+    "source_dataset_modified": false
+}
