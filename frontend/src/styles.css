@@ -404,6 +404,7 @@ tbody tr:last-child td {
 .toolbar select,
 .form-panel input,
 .form-panel textarea,
+.detail-content input,
 .detail-content select,
 .detail-content textarea {
   min-height: 40px;
@@ -420,6 +421,7 @@ tbody tr:last-child td {
 .toolbar select:focus,
 .form-panel input:focus,
 .form-panel textarea:focus,
+.detail-content input:focus,
 .detail-content select:focus,
 .detail-content textarea:focus {
   border-color: #718bd1;
@@ -691,15 +693,21 @@ tbody tr:last-child td {
   font-size: 13px;
 }
 
+.detail-section input,
 .detail-section select,
 .detail-section textarea {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   margin-bottom: 10px;
 }
 
 .detail-section .primary-button {
   width: 100%;
+}
+
+.detail-alert {
+  margin: 16px 0 0;
 }
 
 /* Success state */

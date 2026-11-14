@@ -12,16 +12,17 @@ const errorMiddleware = require("./middleware/errorMiddleware");
 
 const app = express();
 
-// Only listed browser origins may call the API (comma-separated).
-const allowedOrigins = (
-    process.env.CORS_ORIGINS || "http://localhost:5173"
-)
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
+const { createCorsOriginCheck } = require("./config/cors");
 
 app.use(helmet());
-app.use(cors({ origin: allowedOrigins }));
+app.use(
+    cors({
+        origin: createCorsOriginCheck({
+            corsOrigins: process.env.CORS_ORIGINS,
+            nodeEnv: process.env.NODE_ENV,
+        }),
+    })
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 

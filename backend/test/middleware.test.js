@@ -112,7 +112,11 @@ test("classifyError maps known error types to status codes", () => {
     ]);
 
     assert.equal(classifyError({ code: 11000 }).status, 409);
-    assert.equal(classifyError({ type: "entity.parse.failed" }).status, 400);
+    // express.json() errors carry statusCode too; the specific message wins.
+    assert.deepEqual(
+        classifyError({ type: "entity.parse.failed", statusCode: 400 }),
+        { status: 400, message: "Request body is not valid JSON." }
+    );
     assert.equal(classifyError(new Error("boom")).status, 500);
 });
 

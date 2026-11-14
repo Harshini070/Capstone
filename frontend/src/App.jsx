@@ -100,6 +100,9 @@ export default function App() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  // Feedback shown inside the complaint detail window: { type, text }.
+  const [detailNotice, setDetailNotice] = useState(null);
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
@@ -220,10 +223,15 @@ export default function App() {
   }, [complaints, statusCounts]);
 
   // Open complaint details
-  async function openComplaint(id) {
+  // keepNotice: refresh after a save without clearing its feedback.
+  async function openComplaint(id, { keepNotice = false } = {}) {
     setDetailLoading(true);
     setSelected(null);
     setMessage("");
+
+    if (!keepNotice) {
+      setDetailNotice(null);
+    }
 
     try {
       const response = await api.getComplaint(id);
@@ -237,7 +245,7 @@ export default function App() {
       setStatusReason("");
       setCategoryReason("");
     } catch (err) {
-      setMessage(err.message);
+      setError(err.message);
     } finally {
       setDetailLoading(false);
     }
@@ -284,7 +292,7 @@ export default function App() {
     if (!selected || !statusDraft) return;
 
     setSaving(true);
-    setMessage("");
+    setDetailNotice(null);
 
     try {
       await api.updateStatus(selected.complaintId, {
@@ -292,12 +300,12 @@ export default function App() {
         reason: statusReason,
       });
 
-      setMessage("Complaint status updated.");
+      setDetailNotice({ type: "success", text: "Complaint status updated." });
 
-      await openComplaint(selected.complaintId);
+      await openComplaint(selected.complaintId, { keepNotice: true });
       await loadData();
     } catch (err) {
-      setMessage(err.message);
+      setDetailNotice({ type: "error", text: err.message });
     } finally {
       setSaving(false);
     }
@@ -308,7 +316,7 @@ export default function App() {
     if (!selected || !categoryDraft) return;
 
     setSaving(true);
-    setMessage("");
+    setDetailNotice(null);
 
     try {
       await api.updateCategory(selected.complaintId, {
@@ -318,12 +326,12 @@ export default function App() {
           "Category assigned through the GrievanceHub dashboard.",
       });
 
-      setMessage("Category assignment updated.");
+      setDetailNotice({ type: "success", text: "Category assignment updated." });
 
-      await openComplaint(selected.complaintId);
+      await openComplaint(selected.complaintId, { keepNotice: true });
       await loadData();
     } catch (err) {
-      setMessage(err.message);
+      setDetailNotice({ type: "error", text: err.message });
     } finally {
       setSaving(false);
     }
@@ -738,6 +746,23 @@ export default function App() {
             </div>
 
             <div className="detail-content">
+
+              {detailNotice && (
+                <div
+                  className={`alert detail-alert ${
+                    detailNotice.type === "error"
+                      ? "error-alert"
+                      : "success-alert"
+                  }`}
+                  role={detailNotice.type === "error" ? "alert" : "status"}
+                >
+                  {detailNotice.text}
+
+                  <button onClick={() => setDetailNotice(null)}>
+                    ×
+                  </button>
+                </div>
+              )}
 
               <h3>{selected.title}</h3>
 
