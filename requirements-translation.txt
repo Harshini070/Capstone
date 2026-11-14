@@ -1,0 +1,7 @@
+# Optional: only needed for scripts/translate_telugu_queue.py
+# (IndicTrans2 machine translation; large download, GPU recommended).
+-r requirements.txt
+torch==2.14.1
+transformers==5.19.0
+sentencepiece==0.2.2
+indictranstoolkit==1.1.1

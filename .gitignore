@@ -51,3 +51,14 @@ __pycache__/
 reports/aggregate/comparative_eda_v1/
 reports/aggregate/preprocessing_p2_v1/
 reports/aggregate/telugu_nlp_pipeline_v1/
+
+# Node.js
+node_modules/
+dist/
+npm-debug.log*
+
+# Record-level research outputs contain complaint text: never commit them.
+# Only aggregate summaries belong in reports/.
+reports/*_record_level.csv
+reports/phase5_translation_artifact_review.csv
+reports/phase5_telugu_quality_review.csv
