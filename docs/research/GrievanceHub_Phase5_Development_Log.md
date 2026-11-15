@@ -184,3 +184,109 @@ The synthetic populations used the real S1 design, with 1,000 simulations per po
 1. Approve Gate 3: running the AI review, starting with pass-1 batches of the 522-record sample.
 2. LaBSE (about 1.8 GB): install, or keep `NOT_EVALUATED`.
 3. Commit the Gate 2 work. Nothing is committed yet.
+
+---
+
+## 2026-11-15: Gate 2 committed; Gate 3 (AI review, pass 1) started
+
+### Commit
+- Gate 2 was committed to `main` as `0edb11a`: 23 files, staged by name, with a guard confirming no `.env`, `data/` or record-level files. Not pushed; pushing needs separate approval.
+- The commit has no Claude attribution.
+
+### User decisions
+- Gate 3 approved.
+- LaBSE: no explicit choice was given, so it was not installed and the semantic signal stays `NOT_EVALUATED`.
+
+### Tooling change: `phase5_review_batches.py compile`
+- The reviewer writes one line per record in `<BATCH>_review.psv`, a pipe-separated file of short codes (for example `PA` = PARTIAL, `AM` = ACCEPT_WITH_MINOR_ISSUES).
+- Every judgement field is written explicitly for every record; there are no defaults.
+- `compile` expands the codes into the JSON schema and fills in the identity fields (`batch_id`, `review_pass`, `review_method=AI_ASSISTED`, `reviewer_model=claude-opus-5-5`, `protocol_version`, UTC timestamp).
+- The `.psv` file is kept beside each batch as the authored record.
+- New test `test_compile_psv_expands_codes_and_validates`.
+
+### Review conventions applied (consistent with the protocol)
+- **Privacy is judged separately from content.** A record with personal identifiers gets its content decision (for example ACCEPT_WITH_MINOR_ISSUES) together with `error_type=PII` and privacy `PII_IDENTIFIED` or `POTENTIAL_PII`. The eligibility rules then quarantine it automatically. The content judgement is kept in case the record is redacted later.
+- **What counts as an identifier:**
+  - personal names, voter EPIC numbers and flat or door numbers → `PII_IDENTIFIED`;
+  - property-tax SAS application numbers, PIDs and khata numbers → `POTENTIAL_PII` (they can be linked to an owner).
+- **Detail-level mistranslations** that keep the main complaint (for example "spay" → "hunt", or past tense for a request) are recorded as fidelity `PARTIAL` with `TRANSLATION_MEANING_SHIFT`. Untranslated run-on fragments are recorded as `TRANSLATION_ARTIFACT`.
+- **Artifacts noticed in the translation:**
+  - "sterilise" is rendered as క్రిమిరహితం ("disinfect"), which loses the animal-sterilisation sense;
+  - some property IDs are replaced by a `<ఐడీ1>` placeholder.
+
+### Progress
+| Batch | Records | Status |
+|---|---|---|
+| P1-B0001 | 25 (ANIMAL_SERVICES sample) | VALIDATED on the first attempt |
+| P1-B0002 | 25 (ANIMAL_SERVICES / CIVIC_DOCUMENTS sample) | VALIDATED on the first attempt |
+| P1-B0003 | 25 (CIVIC_DOCUMENTS / ELECTRICITY) | VALIDATED |
+| P1-B0004 | 25 (ELECTRICITY / EMPLOYEE_GRIEVANCES / FIRE_EMERGENCY) | VALIDATED |
+| P1-B0005 | 25 (FIRE_EMERGENCY / LAKES_WATERBODIES) | VALIDATED |
+| P1-B0006 | 25 (LAKES_WATERBODIES / PARKS_GREENSPACE) | VALIDATED |
+| P1-B0007 | 25 (PARKS_GREENSPACE / POLLUTION) | VALIDATED |
+| P1-B0008 | 25 (POLLUTION / PUBLIC_INFRASTRUCTURE) | VALIDATED |
+
+All 8 batches passed validation on the first attempt, including the verbatim-evidence check.
+
+### Additional review conventions (2026-11-15)
+- **Sensitive health disclosures** (for example, depression or self-harm statements by the complainant) are not identifiers, but they are special-category personal data. Privacy is recorded as `UNCERTAIN`, so the record is quarantined and never enters ML data. First case: BG-TEL-13706.
+- **A first name alone**, or a commercial vehicle plate → `POTENTIAL_PII`. A name combined with property identifiers, a full address or a phone number → `PII_IDENTIFIED`.
+- **Category definitions from the protocol are applied as written, even when the citizen's source category differs.** Examples:
+  - public urination → PUBLIC_SANITATION;
+  - a single streetlight → STREETLIGHT;
+  - a bus-shelter design complaint → PUBLIC_TRANSPORT;
+  - sewage into a well → SEWERAGE_DRAINAGE;
+  - contaminated supply water → WATER_SUPPLY.
+- **Texts with no usable complaint** are rejected with `INSUFFICIENT_CONTEXT`. Examples: "Not sterilised", "Rat, catterpillar and snake mess", a bare park name.
+- **Recurring translation failure modes:**
+  - typos translated literally ("lakh" → lakhs of people, "in vein" → a blood vessel, "nigh time" → near time);
+  - place-name parts translated (Silk Board → silk board, Dodda → big);
+  - degenerate repetition (BG-TEL-08743 "R. R. R. …", BG-TEL-06603);
+  - inverted negations (BG-TEL-08774, BG-TEL-11265, BG-TEL-10573).
+
+### Interim tally after 200 pass-1 reviews (sample records only; descriptive, not a population estimate)
+- **Decisions:** ACCEPT_WITH_MINOR_ISSUES 114, ACCEPT 57, RELABEL 11, REJECT 10, AMBIGUOUS 8.
+- **Translation fidelity:** PASS 117, PARTIAL 79, FAIL 4.
+- **Privacy:** NO_OBVIOUS_PII 172, POTENTIAL_PII 15, PII_IDENTIFIED 12, UNCERTAIN 1.
+- **Category correctness:** CORRECT 176, INCORRECT 12, AMBIGUOUS 8, UNCERTAIN 4.
+
+These are pass-1 decisions only. The sample strata are reviewed in sorted category order, so these counts are not representative of the whole dataset. Population estimates come only from S9, after pass 2 and adjudication.
+
+### Mapping investigation finding: "Yellow Spot" (2026-11-15, during P1-B0011)
+- **What the review found.** Pass-1 review of the PUBLIC_SANITATION sample found that many records from the source category "Yellow Spot" are footpath or garbage complaints.
+- **Source subcategories** (`data/external/bengaluru_complaints.csv`, all 948 "Yellow Spot" records):
+
+  | Group | Subcategories (records) | Total |
+  |---|---|---|
+  | Sanitation | Public Urination or Yellow Spot (253 + 8); New Public Toilet (87 + 3); Dirty or Unusable Public Toilet (18 + 1 + 1) | 371 |
+  | Footpath | Broken Footpath (175 + 29); New Footpath (103 + 8) | 315 |
+  | Garbage | Garbage or Debris on Footpath (196 + 62) | 258 |
+  | Other | Playing and Gym Equipment | 4 |
+
+- **Conclusion.** About 61% of "Yellow Spot" records are not sanitation complaints. The provisional taxonomy maps at **category** level, so all 948 records were labelled PUBLIC_SANITATION.
+- **Methodological limitation.** The S3 out-of-fold heuristic did not flag this mapping (S3 top concentration: Sanitation 31%, Yellow Spot below the threshold). Because hundreds of footpath records share the same wrong label, the model learns the error consistently. **Confident-learning-style heuristics cannot detect systematic mapping errors.** Category-level mapping errors need subcategory-level audits.
+- **Recommendation (NOT applied; needs user approval and a new taxonomy version):** map "Yellow Spot" by subcategory:
+  - footpath subcategories → ROAD_INFRASTRUCTURE;
+  - garbage or debris on footpath → SOLID_WASTE;
+  - urination and toilet subcategories → PUBLIC_SANITATION;
+  - playing and gym equipment → PARKS_GREENSPACE.
+- **Until a decision is made,** affected reviewed records are relabelled individually with `error_type=CATEGORY_MAPPING_ERROR`. Records whose only Telugu content is the literal jargon "yellow spot" (rendered as "yellow-coloured spots") are rejected as `INSUFFICIENT_CONTEXT`.
+- **The same pattern was seen for "PWD".** All 3 PWD records reviewed so far are road complaints (BG-TEL-10120, 10135, 10169). This matches the S3 mapping-concentration flag (PWD: 4 of 5 flagged toward ROAD_INFRASTRUCTURE).
+
+| Batch | Records | Status |
+|---|---|---|
+| P1-B0009 | 25 (PUBLIC_INFRASTRUCTURE / PUBLIC_SAFETY) | VALIDATED |
+| P1-B0010 | 25 (PUBLIC_SAFETY) | VALIDATED |
+| P1-B0011 | 25 (PUBLIC_SAFETY / PUBLIC_SANITATION) | VALIDATED |
+| P1-B0012 | 25 (PUBLIC_SANITATION / PUBLIC_TRANSPORT) | VALIDATED |
+
+### Second category-level mapping pattern: "Mobility - Roads, Public transport"
+- This source category is mapped to PUBLIC_TRANSPORT, but it contains footpath and road complaints (BG-TEL-03735, 01496, 02332). These were relabelled to ROAD_INFRASTRUCTURE as `CATEGORY_MAPPING_ERROR`.
+- A subcategory-level audit, like the one for Yellow Spot, is recommended before the taxonomy is revised. It is not applied.
+
+### Checkpoint: 300 pass-1 reviews (12 batches, all VALIDATED on the first attempt)
+- 222 random-sample records and 1,450 flagged records remain for pass 1. Pass 2 and adjudication have not started.
+- Resume with:
+  ```
+  python scripts/phase5_review_batches.py export --pass 1 --size 25
+  ```

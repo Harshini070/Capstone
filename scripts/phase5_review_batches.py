@@ -320,6 +320,93 @@ def merge_pass(review_pass: str) -> Path:
     return path
 
 
+# ---------------------------------------------------------------------------
+# Compile a reviewer-authored decision file into the JSON output schema
+# ---------------------------------------------------------------------------
+# The reviewer writes one line per record in <BATCH>_review.psv (pipe-
+# separated, header line first) using the short codes below. Every judgement
+# field is written explicitly for every record; there are no defaults.
+# compile only expands the codes and fills the identity fields
+# (batch_id, review_pass, review_method, reviewer_model, protocol_version,
+# review_timestamp). The .psv file is kept as the authored record.
+
+PSV_COLUMNS = ["record_id", "fid", "gram", "comp", "miss", "add", "cat", "corr",
+               "sec", "geo", "priv", "dec", "err", "ev_src", "ev_tel", "expl", "pii"]
+CODES = {
+    "fid": ("translation_fidelity", {"P": "PASS", "PA": "PARTIAL", "F": "FAIL", "U": "UNCERTAIN"}),
+    "gram": ("telugu_grammar", {"G": "GOOD", "MI": "MINOR_ISSUES", "MA": "MAJOR_ISSUES", "U": "UNCERTAIN"}),
+    "comp": ("translation_completeness", {"C": "COMPLETE", "P": "PARTIAL", "I": "INCOMPLETE", "U": "UNCERTAIN"}),
+    "miss": ("missing_information", {"N": "NONE", "MI": "MINOR", "MA": "MAJOR"}),
+    "add": ("added_information", {"N": "NONE", "MI": "MINOR", "MA": "MAJOR"}),
+    "cat": ("category_correctness", {"C": "CORRECT", "I": "INCORRECT", "A": "AMBIGUOUS", "U": "UNCERTAIN"}),
+    "geo": ("geography_assessment", {"V": "SOURCE_REFERENCE_VALID", "R": "REQUIRES_CONTEXTUAL_REVIEW",
+                                     "X": "INCORRECT_OR_MISTRANSLATED", "N": "NO_GEOGRAPHY_REFERENCE"}),
+    "priv": ("privacy_assessment", {"N": "NO_OBVIOUS_PII", "P": "POTENTIAL_PII", "I": "PII_IDENTIFIED",
+                                    "U": "UNCERTAIN"}),
+    "dec": ("review_decision", {"A": "ACCEPT", "AM": "ACCEPT_WITH_MINOR_ISSUES", "RL": "RELABEL",
+                                "AMB": "AMBIGUOUS", "REJ": "REJECT", "E": "ESCALATE"}),
+    "err": ("error_type", {"N": "NONE", "SLN": "SOURCE_LABEL_NOISE", "CME": "CATEGORY_MAPPING_ERROR",
+                           "TMS": "TRANSLATION_MEANING_SHIFT", "TA": "TRANSLATION_ARTIFACT",
+                           "IC": "INSUFFICIENT_CONTEXT", "MULTI": "MULTI_ISSUE", "OOS": "OUT_OF_SCOPE",
+                           "PII": "PII"}),
+}
+
+
+def parse_pii_cell(cell: str) -> list[dict]:
+    """'TYPE~field~text;;TYPE~field~text' -> [{type, field, text}]."""
+    spans = []
+    for part in [p for p in cell.split(";;") if p.strip()]:
+        pieces = part.split("~", 2)
+        if len(pieces) != 3:
+            raise ValueError(f"bad pii span {part!r}; expected TYPE~field~text")
+        spans.append({"type": pieces[0].strip(), "field": pieces[1].strip(), "text": pieces[2].strip()})
+    return spans
+
+
+def compile_psv(text: str, batch_id: str, review_pass: str, reviewer_model: str,
+                timestamp: str) -> list[dict]:
+    lines = [ln for ln in text.splitlines() if ln.strip() and not ln.lstrip().startswith("#")]
+    header = [h.strip() for h in lines[0].split("|")]
+    if header != PSV_COLUMNS:
+        raise ValueError(f"header must be {'|'.join(PSV_COLUMNS)}")
+    rows = []
+    for number, line in enumerate(lines[1:], start=2):
+        cells = [c.strip() for c in line.split("|")]
+        if len(cells) != len(PSV_COLUMNS):
+            raise ValueError(f"line {number}: expected {len(PSV_COLUMNS)} fields, got {len(cells)}")
+        raw = dict(zip(PSV_COLUMNS, cells))
+        row = {
+            "record_id": raw["record_id"], "batch_id": batch_id, "review_pass": review_pass,
+            "review_method": common.REVIEW_METHOD, "reviewer_model": reviewer_model,
+            "protocol_version": common.PROTOCOL_VERSION, "review_timestamp": timestamp,
+        }
+        for short, (field, mapping) in CODES.items():
+            if raw[short] not in mapping:
+                raise ValueError(f"line {number}: {short}={raw[short]!r} not in {sorted(mapping)}")
+            row[field] = mapping[raw[short]]
+        row["corrected_category"] = raw["corr"].upper()
+        row["secondary_category"] = raw["sec"].upper()
+        row["evidence_source"] = raw["ev_src"]
+        row["evidence_telugu"] = raw["ev_tel"]
+        row["explanation"] = raw["expl"]
+        row["pii_spans"] = parse_pii_cell(raw["pii"])
+        rows.append(row)
+    return rows
+
+
+def cmd_compile(review_pass: str, batch_id: str, reviewer_model: str) -> Path:
+    folder = pass_dir(review_pass)
+    manifest = json.loads((folder / f"{batch_id}_manifest.json").read_text(encoding="utf-8"))
+    if manifest["status"] == "VALIDATED":
+        raise SystemExit(f"{batch_id} is already validated and frozen.")
+    psv = folder / f"{batch_id}_review.psv"
+    rows = compile_psv(psv.read_text(encoding="utf-8"), batch_id, review_pass, reviewer_model, _now())
+    output = folder / f"{batch_id}_output.json"
+    output.write_text(json.dumps(rows, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    print(f"Compiled {len(rows)} reviews -> {output}")
+    return output
+
+
 def status() -> dict:
     report = {}
     for review_pass in common.REVIEW_PASSES:
@@ -351,6 +438,10 @@ def main(argv=None):
     v = sub.add_parser("validate")
     v.add_argument("--pass", dest="review_pass", choices=common.REVIEW_PASSES, required=True)
     v.add_argument("--batch-id", required=True)
+    c = sub.add_parser("compile")
+    c.add_argument("--pass", dest="review_pass", choices=common.REVIEW_PASSES, required=True)
+    c.add_argument("--batch-id", required=True)
+    c.add_argument("--reviewer-model", default=common.DEFAULT_REVIEWER_MODEL)
     m = sub.add_parser("merge")
     m.add_argument("--pass", dest="review_pass", choices=common.REVIEW_PASSES, required=True)
     sub.add_parser("status")
@@ -368,6 +459,8 @@ def main(argv=None):
                 print("  -", error)
             return 1
         print(f"{args.batch_id}: VALIDATED")
+    elif args.command == "compile":
+        cmd_compile(args.review_pass, args.batch_id, args.reviewer_model)
     elif args.command == "merge":
         merge_pass(args.review_pass)
     elif args.command == "status":

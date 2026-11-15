@@ -318,6 +318,20 @@ class BatchAndOverlapTests(unittest.TestCase):
         self.assertIn("missing records", joined)
         self.assertIn("not in this batch", joined)
 
+    def test_compile_psv_expands_codes_and_validates(self):
+        psv = ("record_id|fid|gram|comp|miss|add|cat|corr|sec|geo|priv|dec|err|ev_src|ev_tel|expl|pii\n"
+               "R1|P|G|C|N|N|I|ROAD_INFRASTRUCTURE||N|N|RL|SLN|Garbage not cleared|చెత్త|Pothole complaint.|\n")
+        rows = batches.compile_psv(psv, "P1-B0001", "1", "claude-opus-5-5", "2026-11-15T10:00:00+00:00")
+        self.assertEqual(rows[0]["review_decision"], "RELABEL")
+        self.assertEqual(rows[0]["corrected_category"], "ROAD_INFRASTRUCTURE")
+        self.assertEqual(rows[0]["pii_spans"], [])
+        self.assertEqual(common.validate_review_record(rows[0], "SOLID_WASTE", ASSIGNABLE,
+                                                       source_text=SOURCE, telugu_text=TELUGU), [])
+        with self.assertRaises(ValueError):
+            batches.compile_psv(psv.replace("|RL|", "|XX|"), "P1-B0001", "1", "m", "t")
+        spans = batches.parse_pii_cell("INDIAN_MOBILE~source_description~98806 09192")
+        self.assertEqual(spans[0]["type"], "INDIAN_MOBILE")
+
     def test_pass2_order_is_seeded_permutation(self):
         ids = [f"R{i}" for i in range(50)]
         order = batches.pass2_order(ids)
