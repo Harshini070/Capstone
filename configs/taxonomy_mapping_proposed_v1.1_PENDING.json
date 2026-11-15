@@ -1,0 +1,44 @@
+{
+ "registry_name": "GrievanceHub Provisional Taxonomy Mapping - proposed subcategory overrides",
+ "version": "1.1-proposed",
+ "base_version": "1.0",
+ "base_file": "configs/taxonomy_mapping_provisional_v1.json",
+ "created_at_utc": "2026-11-15T00:00:00+00:00",
+ "registry_status": "PENDING_USER_APPROVAL",
+ "applied": false,
+ "purpose": "Proposed subcategory-level overrides for source categories that pass-1 AI review and a subcategory audit showed to be mixed. Not applied to any dataset. Until approved, affected records are relabelled one at a time during review with error_type=CATEGORY_MAPPING_ERROR.",
+ "evidence": {
+  "source_file": "data/external/bengaluru_complaints.csv",
+  "review_log": "docs/research/GrievanceHub_Phase5_Development_Log.md",
+  "note": "Counts are all source records, not just reviewed ones. Subcategory ids are not unique within Yellow Spot (for example 714 is used for both 'Require A New Footpath' and '2C- Remove Garbage or Debris on Footpath'), so overrides match on (category_id, category_title, sub_category_title), never on sub_category_id alone. Titles are compared after stripping whitespace (the source has '\n' at the end of '2A- Require New Footpath')."
+ },
+ "match_keys": ["source_category_id", "source_category_title", "source_subcategory_title"],
+ "overrides": [
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Report A Public Urination or Yellow Spot", "record_count": 253, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "1A- Address Public Urination or Yellow Spots", "record_count": 8, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Require A New Public Toilet", "record_count": 87, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "1B- Require New Public Toilet", "record_count": 3, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Report A Dirty or Unusable Public Toilet", "record_count": 18, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "1C- Repair Dirty or Unusable Public Toilet", "record_count": 1, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Report A Dirty or Unusable Mobile Public Toilet", "record_count": 1, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PUBLIC_SANITATION", "change": false},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Report Garbage or Debris on Footpath", "record_count": 196, "v1_target": "PUBLIC_SANITATION", "proposed_target": "SOLID_WASTE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "2C- Remove Garbage or Debris on Footpath", "record_count": 62, "v1_target": "PUBLIC_SANITATION", "proposed_target": "SOLID_WASTE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Report A Broken Footpath", "record_count": 175, "v1_target": "PUBLIC_SANITATION", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "Require A New Footpath", "record_count": 103, "v1_target": "PUBLIC_SANITATION", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "2B- Repair Broken Footpath", "record_count": 29, "v1_target": "PUBLIC_SANITATION", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "2A- Require New Footpath", "record_count": 8, "v1_target": "PUBLIC_SANITATION", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true},
+  {"source_category_id": "708", "source_category_title": "Yellow Spot", "source_subcategory_title": "3A- Require Playing and Gym Equipment", "record_count": 4, "v1_target": "PUBLIC_SANITATION", "proposed_target": "PARKS_GREENSPACE", "change": true},
+  {"source_category_id": "564", "source_category_title": "PWD", "source_subcategory_title": "Repair of Potholes on Roads", "record_count": 5, "v1_target": "PUBLIC_INFRASTRUCTURE", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true},
+  {"source_category_id": "15", "source_category_title": "Mobility - Roads, Public transport", "source_subcategory_title": "Repair Of Existing Footpaths", "record_count": 12, "v1_target": "PUBLIC_TRANSPORT", "proposed_target": "ROAD_INFRASTRUCTURE", "change": true, "note": "Category id 15 is the roads category; these records carry a variant title, and the v1 mapping keyed on the title."},
+  {"source_category_id": "202", "source_category_title": "Mobility - Roads, Public transport", "source_subcategory_title": "Installation of traffic lights", "record_count": 2, "v1_target": "PUBLIC_TRANSPORT", "proposed_target": "TRAFFIC_SAFETY", "change": true},
+  {"source_category_id": "202", "source_category_title": "Mobility - Roads, Public transport", "source_subcategory_title": "Construction of skywalks", "record_count": 1, "v1_target": "PUBLIC_TRANSPORT", "proposed_target": "TRAFFIC_SAFETY", "change": true},
+  {"source_category_id": "202", "source_category_title": "Mobility - Roads, Public transport", "source_subcategory_title": "Introduction of new bus routes", "record_count": 1, "v1_target": "PUBLIC_TRANSPORT", "proposed_target": "PUBLIC_TRANSPORT", "change": false},
+  {"source_category_id": "202", "source_category_title": "Mobility - Roads, Public transport", "source_subcategory_title": "Construction of flyovers/ underpass", "record_count": 3, "v1_target": "PUBLIC_TRANSPORT", "proposed_target": "MANUAL_REVIEW_REQUIRED", "change": true, "note": "Flyover requests split between congestion (TRAFFIC_SAFETY) and road works; decide per record."}
+ ],
+ "impact_summary": {
+  "Yellow Spot": {"total": 948, "stays_PUBLIC_SANITATION": 371, "to_SOLID_WASTE": 258, "to_ROAD_INFRASTRUCTURE": 315, "to_PARKS_GREENSPACE": 4},
+  "PWD": {"total": 5, "to_ROAD_INFRASTRUCTURE": 5},
+  "Mobility - Roads, Public transport": {"total": 19, "to_ROAD_INFRASTRUCTURE": 12, "to_TRAFFIC_SAFETY": 3, "stays_PUBLIC_TRANSPORT": 1, "manual_review": 3},
+  "records_changing_target": 600
+ }
+}

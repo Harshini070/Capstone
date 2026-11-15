@@ -290,3 +290,60 @@ These are pass-1 decisions only. The sample strata are reviewed in sorted catego
   ```
   python scripts/phase5_review_batches.py export --pass 1 --size 25
   ```
+
+---
+
+## 2026-11-15 (continued): pass 1 resumed at P1-B0013; mapping proposal v1.1 drafted
+
+### Commit
+- The `compile` step, its test and the log were committed locally as `2425703`, with no attribution. 67 unit tests pass. Not pushed; pushing still needs explicit approval.
+
+### Progress
+| Batch | Records | Status |
+|---|---|---|
+| P1-B0013 | 25 (PUBLIC_TRANSPORT / ROAD_INFRASTRUCTURE) | VALIDATED after one fix: two AMBIGUOUS rows used `error_type=NONE`, which the validator rejects; corrected to MULTI_ISSUE |
+| P1-B0014 | 25 (ROAD_INFRASTRUCTURE / SEWERAGE_DRAINAGE) | VALIDATED |
+| P1-B0015 | 25 (SEWERAGE_DRAINAGE / SOCIAL_WELFARE / SOLID_WASTE) | VALIDATED |
+| P1-B0016 | 25 (SOLID_WASTE) | VALIDATED |
+
+Pass 1 now covers **400 records**. In the 100 new reviews: ACCEPT 24, ACCEPT_WITH_MINOR_ISSUES 50, RELABEL 15, REJECT 6, AMBIGUOUS 5. Fidelity: PASS 48, PARTIAL 51, FAIL 1. Privacy: NO_OBVIOUS_PII 89, POTENTIAL_PII 5, PII_IDENTIFIED 5, UNCERTAIN 1. These are descriptive pass-1 counts, not population estimates.
+
+### Conventions added
+- **Religious-affiliation disclosure** is treated like a health disclosure: special-category personal data, privacy `UNCERTAIN`, so the record is quarantined. The span type is `RELIGION_DISCLOSURE`. First case: BG-TEL-09169, which also calls for police violence against lockdown crowds; its content is relabelled PUBLIC_SAFETY.
+- **A street-level address without a door or flat number**, given alone, is not treated as PII. A door number, or a name together with an apartment address, is `PII_IDENTIFIED`, as before.
+- **A staff member's name** (for example a BWSSB contact) and **earlier complaint or request numbers** → `POTENTIAL_PII`.
+- **Specific relabels in this session:**
+  - parking, speed humps and medians against overtaking → TRAFFIC_SAFETY;
+  - storm-drain flooding → STORMWATER;
+  - a road blocked or left incomplete after sewer work → ROAD_INFRASTRUCTURE;
+  - dirty public washrooms at a bus stand → PUBLIC_SANITATION.
+
+### More recurring translation failures
+- "pot holes" → కుండ రంధ్రాలు ("holes in a cooking pot"), found in 6+ records.
+- Place-name parts translated: "9th Cross" → ninth crucifix (శిలువ); "Tiny Bees school" → small honeybees; "Naidu farm road" → Naidu's farm; "Vijayanagar" → Vizianagaram; "Doddakannahalli" → పెద్ద…
+- Titles turned into imperatives: "Open manhole" → "open the manhole"; "Reverse from manhole" → "go back from the manhole".
+- Invented content: a river added to "Overflowing at SP Raod"; a temple added to a truncated title.
+- Typo-driven reversals: "Now one has fixed it" (no one) → "now they fixed it"; "Ration not issues" → "no ration issues".
+
+### Subcategory audit and proposed taxonomy v1.1 (NOT applied)
+- File: `configs/taxonomy_mapping_proposed_v1.1_PENDING.json`, status `PENDING_USER_APPROVAL`, `applied: false`. The v1.0 registry is unchanged.
+- **The overrides match on (category_id, category_title, sub_category_title):**
+  - Subcategory ids are not unique inside Yellow Spot. For example, 714 is used for both "Require A New Footpath" and "2C- Remove Garbage or Debris on Footpath".
+  - One raw title ends in a newline (`2A- Require New Footpath\n`), so titles must be compared after stripping whitespace.
+- **New finding (title-variant mapping error).** The 12 "Repair Of Existing Footpaths" records labelled "Mobility - Roads, Public transport" carry `category_id` **15**, which is the roads category, not 202. The v1.0 registry has a separate row for (15, "Mobility - Roads, Public transport") that maps to PUBLIC_TRANSPORT because it keyed on the title. Category id 470 also has two titles ("Street lighting" / "Streetlights"), but both map to the same target.
+- **Proposed changes** (all counts checked against `data/external/bengaluru_complaints.csv`):
+  - **Yellow Spot (948):** 371 stay PUBLIC_SANITATION; 258 → SOLID_WASTE; 315 → ROAD_INFRASTRUCTURE; 4 → PARKS_GREENSPACE.
+  - **PWD (5):** all → ROAD_INFRASTRUCTURE.
+  - **Mobility - Roads, Public transport (19):**
+    - 12 → ROAD_INFRASTRUCTURE;
+    - 3 → TRAFFIC_SAFETY (traffic lights, skywalk);
+    - 1 stays PUBLIC_TRANSPORT;
+    - 3 (flyovers/underpass) → per-record manual review.
+  - In total, 600 records would change target.
+- **Until approved,** affected records keep being relabelled one at a time during review (`CATEGORY_MAPPING_ERROR`).
+
+### Resume
+```
+python scripts/phase5_review_batches.py export --pass 1 --size 25   # next: P1-B0017
+```
+Remaining for pass 1: 122 sample records and 1,450 flagged records.
