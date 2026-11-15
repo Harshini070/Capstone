@@ -85,7 +85,7 @@ def count_statuses(series):
     }
 
 
-def main():
+def run_default_policy():
     if not INPUT_FILE.exists():
         print(f"ERROR: Dataset not found:\n{INPUT_FILE}")
         return 1
@@ -379,6 +379,96 @@ def main():
 
     print("\nAudit completed. Source dataset was not modified.")
     return 0
+
+
+# ---------------------------------------------------------
+# Policy ai_assisted_v1 (Phase 5 AI-assisted review)
+# ---------------------------------------------------------
+# Explicit opt-in only. Reads the reviewed dataset v3 produced by
+# scripts/phase5_apply_review_decisions.py. The default policy above is
+# unchanged and still evaluates the historical status columns.
+
+AI_POLICY_INPUT = (
+    PROJECT_ROOT / "data" / "processed"
+    / "translated_bengaluru_reviewed_v3.csv"
+)
+AI_POLICY_REPORT = (
+    REPORT_DIR / "phase5_review" / "eligibility_audit_ai_assisted_v1.json"
+)
+AI_ELIGIBLE_STATES = {"AI_REVIEWED_ACCEPTED", "AI_REVIEWED_RELABELLED"}
+AI_RARE_CLASSES = {"EMPLOYEE_GRIEVANCES", "SOCIAL_WELFARE", "FIRE_EMERGENCY"}
+AI_REQUIRED_COLUMNS = [
+    "record_id", "eligibility_state", "final_category", "review_method",
+    "review_privacy_assessment", "dedup_group_id",
+]
+
+
+def ai_assisted_v1_eligible(df):
+    """Boolean mask of records eligible under policy ai_assisted_v1.
+
+    Re-checks the critical gates defensively instead of trusting the state
+    column alone: AI-assisted review, explicit NO_OBVIOUS_PII, non-rare
+    final category, and an eligible state.
+    """
+    missing = [c for c in AI_REQUIRED_COLUMNS if c not in df.columns]
+    if missing:
+        raise ValueError(f"Missing columns for ai_assisted_v1: {missing}")
+    state = df["eligibility_state"].fillna("").astype(str)
+    return (
+        state.isin(AI_ELIGIBLE_STATES)
+        & df["review_method"].fillna("").astype(str).eq("AI_ASSISTED")
+        & df["review_privacy_assessment"].fillna("").astype(str).eq("NO_OBVIOUS_PII")
+        & ~df["final_category"].fillna("").astype(str).isin(AI_RARE_CLASSES)
+    )
+
+
+def run_ai_assisted_policy(input_file=AI_POLICY_INPUT, report_path=AI_POLICY_REPORT):
+    if not Path(input_file).exists():
+        print(f"ERROR: reviewed dataset not found: {input_file}")
+        return 1
+    df = pd.read_csv(input_file, encoding="utf-8-sig", low_memory=False,
+                     dtype=str, keep_default_na=False)
+    eligible = ai_assisted_v1_eligible(df)
+    report = {
+        "audit_name": "GrievanceHub Phase 5 Training Eligibility Audit",
+        "policy": "ai_assisted_v1",
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "input_file": str(input_file),
+        "source_dataset_modified": False,
+        "total_records": int(len(df)),
+        "eligible_records": int(eligible.sum()),
+        "eligibility_state_counts": df["eligibility_state"].value_counts().to_dict(),
+        "eligible_by_final_category": (
+            df.loc[eligible, "final_category"].value_counts().to_dict()
+        ),
+        "eligible_dedup_groups": int(df.loc[eligible, "dedup_group_id"].nunique()),
+        "notes": [
+            "Clearance under this policy comes from an AI-assisted review "
+            "(two AI passes plus adjudication). There was no human annotation.",
+            "AI agreement is self-consistency, not ground truth.",
+            "Translated experimental corpus derived from Bengaluru/BBMP data; "
+            "not authentic Hyderabad/GHMC complaints.",
+        ],
+    }
+    Path(report_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(report_path).write_text(json.dumps(report, indent=4, ensure_ascii=False), encoding="utf-8")
+    print(f"Policy ai_assisted_v1: {report['eligible_records']} of {report['total_records']} eligible")
+    print(f"Report saved: {report_path}")
+    return 0
+
+
+def main(argv=None):
+    import argparse
+    parser = argparse.ArgumentParser(description="Phase 5 training eligibility audit")
+    parser.add_argument(
+        "--policy", choices=["default", "ai_assisted_v1"], default="default",
+        help="default = historical status-column gates (unchanged); "
+             "ai_assisted_v1 = reviewed dataset v3 eligibility states",
+    )
+    args = parser.parse_args(argv)
+    if args.policy == "ai_assisted_v1":
+        return run_ai_assisted_policy()
+    return run_default_policy()
 
 
 if __name__ == "__main__":

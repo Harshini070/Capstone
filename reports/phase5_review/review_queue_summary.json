@@ -1,0 +1,13 @@
+{
+  "stage": "review_queue",
+  "generated_at_utc": "2026-11-15T16:39:34.910614+00:00",
+  "records": 1972,
+  "by_inclusion_reason": {
+    "S3_LABEL_NOISE_FLAG": 935,
+    "S2_CATEGORY_SIGNAL_CONFLICT": 515,
+    "RANDOM_SAMPLE": 480,
+    "SAMPLE_AND_FLAG": 42
+  },
+  "max_flagged": 1500,
+  "note": "Flagged records are a non-random selection and never contribute to population estimates."
+}

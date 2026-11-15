@@ -1,0 +1,129 @@
+{
+  "stage": "S1_review_sample_v2",
+  "generated_at_utc": "2026-11-15T16:24:41.632480+00:00",
+  "population_file": "reports\\phase5_telugu_quality_record_level.csv",
+  "population_records": 15374,
+  "sample_records": 522,
+  "strata": 20,
+  "design": {
+    "type": "stratified simple random sampling without replacement",
+    "stratum_variable": "target_category_code (given label)",
+    "per_stratum": 30,
+    "rule": "n_h = min(30, N_h); strata with N_h <= 30 taken in full",
+    "seed": 42,
+    "inclusion_probability": "n_h / N_h",
+    "sampling_weight": "N_h / n_h"
+  },
+  "verification": {
+    "matches_original_sample_texts_in_order": true,
+    "record_id_unique": true,
+    "candidate_text_matches_record_level_text": true
+  },
+  "strata_table": [
+    {
+      "sampling_stratum": "ANIMAL_SERVICES",
+      "N_h": 846,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "CIVIC_DOCUMENTS",
+      "N_h": 50,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "ELECTRICITY",
+      "N_h": 238,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "EMPLOYEE_GRIEVANCES",
+      "N_h": 1,
+      "n_h": 1
+    },
+    {
+      "sampling_stratum": "FIRE_EMERGENCY",
+      "N_h": 10,
+      "n_h": 10
+    },
+    {
+      "sampling_stratum": "LAKES_WATERBODIES",
+      "N_h": 53,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "PARKS_GREENSPACE",
+      "N_h": 225,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "POLLUTION",
+      "N_h": 423,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "PUBLIC_INFRASTRUCTURE",
+      "N_h": 136,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "PUBLIC_SAFETY",
+      "N_h": 150,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "PUBLIC_SANITATION",
+      "N_h": 1032,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "PUBLIC_TRANSPORT",
+      "N_h": 63,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "ROAD_INFRASTRUCTURE",
+      "N_h": 5108,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "SEWERAGE_DRAINAGE",
+      "N_h": 283,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "SOCIAL_WELFARE",
+      "N_h": 1,
+      "n_h": 1
+    },
+    {
+      "sampling_stratum": "SOLID_WASTE",
+      "N_h": 3870,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "STORMWATER",
+      "N_h": 128,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "STREETLIGHT",
+      "N_h": 1470,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "TRAFFIC_SAFETY",
+      "N_h": 958,
+      "n_h": 30
+    },
+    {
+      "sampling_stratum": "WATER_SUPPLY",
+      "N_h": 329,
+      "n_h": 30
+    }
+  ],
+  "fully_enumerated_strata": [
+    "EMPLOYEE_GRIEVANCES",
+    "FIRE_EMERGENCY",
+    "SOCIAL_WELFARE"
+  ]
+}

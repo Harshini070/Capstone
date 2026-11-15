@@ -1,0 +1,173 @@
+{
+  "stage": "S3_label_noise_detection",
+  "method": "Out-of-fold label-noise heuristic inspired by confident learning (not a formal confident-learning implementation)",
+  "generated_at_utc": "2026-11-15T16:33:08.296155+00:00",
+  "records_total": 15374,
+  "records_evaluated": 15362,
+  "records_not_evaluated": {
+    "EVALUATED": 15362,
+    "NOT_EVALUATED_RARE_CLASS": 12
+  },
+  "primary_classes": [
+    "ANIMAL_SERVICES",
+    "CIVIC_DOCUMENTS",
+    "ELECTRICITY",
+    "LAKES_WATERBODIES",
+    "PARKS_GREENSPACE",
+    "POLLUTION",
+    "PUBLIC_INFRASTRUCTURE",
+    "PUBLIC_SAFETY",
+    "PUBLIC_SANITATION",
+    "PUBLIC_TRANSPORT",
+    "ROAD_INFRASTRUCTURE",
+    "SEWERAGE_DRAINAGE",
+    "SOLID_WASTE",
+    "STORMWATER",
+    "STREETLIGHT",
+    "TRAFFIC_SAFETY",
+    "WATER_SUPPLY"
+  ],
+  "rare_classes_excluded": [
+    "EMPLOYEE_GRIEVANCES",
+    "FIRE_EMERGENCY",
+    "SOCIAL_WELFARE"
+  ],
+  "unsupported_classes_dropped": {},
+  "model": "TF-IDF char_wb 2-5 (min_df=2, sublinear_tf, max_features=200000, fitted per training fold) + LogisticRegression(class_weight=balanced, max_iter=2000)",
+  "folds": {
+    "n_splits": 5,
+    "grouping": "dedup_group_id",
+    "seed": 42,
+    "valid": true
+  },
+  "per_class_thresholds": {
+    "ANIMAL_SERVICES": 0.779143,
+    "CIVIC_DOCUMENTS": 0.654213,
+    "ELECTRICITY": 0.720677,
+    "LAKES_WATERBODIES": 0.524872,
+    "PARKS_GREENSPACE": 0.550911,
+    "POLLUTION": 0.469525,
+    "PUBLIC_INFRASTRUCTURE": 0.292501,
+    "PUBLIC_SAFETY": 0.224611,
+    "PUBLIC_SANITATION": 0.564383,
+    "PUBLIC_TRANSPORT": 0.291766,
+    "ROAD_INFRASTRUCTURE": 0.460745,
+    "SEWERAGE_DRAINAGE": 0.522276,
+    "SOLID_WASTE": 0.565256,
+    "STORMWATER": 0.355147,
+    "STREETLIGHT": 0.68231,
+    "TRAFFIC_SAFETY": 0.541997,
+    "WATER_SUPPLY": 0.694915
+  },
+  "flagged_records": 977,
+  "flagged_in_random_sample": 42,
+  "flagged_outside_random_sample": 935,
+  "flagged_by_given_category": {
+    "ROAD_INFRASTRUCTURE": 408,
+    "SOLID_WASTE": 163,
+    "PUBLIC_SANITATION": 121,
+    "TRAFFIC_SAFETY": 66,
+    "STREETLIGHT": 58,
+    "POLLUTION": 48,
+    "SEWERAGE_DRAINAGE": 30,
+    "PUBLIC_SAFETY": 24,
+    "PUBLIC_INFRASTRUCTURE": 15,
+    "STORMWATER": 11,
+    "ELECTRICITY": 8,
+    "ANIMAL_SERVICES": 7,
+    "PARKS_GREENSPACE": 7,
+    "WATER_SUPPLY": 5,
+    "PUBLIC_TRANSPORT": 4,
+    "LAKES_WATERBODIES": 2
+  },
+  "top_given_to_suggested_pairs": [
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "STORMWATER",
+      "n": 87
+    },
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "SEWERAGE_DRAINAGE",
+      "n": 73
+    },
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "PUBLIC_INFRASTRUCTURE",
+      "n": 63
+    },
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "PUBLIC_SANITATION",
+      "n": 44
+    },
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "TRAFFIC_SAFETY",
+      "n": 41
+    },
+    {
+      "given_category": "PUBLIC_SANITATION",
+      "suggested_category": "SOLID_WASTE",
+      "n": 41
+    },
+    {
+      "given_category": "ROAD_INFRASTRUCTURE",
+      "suggested_category": "PUBLIC_SAFETY",
+      "n": 38
+    },
+    {
+      "given_category": "PUBLIC_SANITATION",
+      "suggested_category": "ROAD_INFRASTRUCTURE",
+      "n": 29
+    },
+    {
+      "given_category": "SOLID_WASTE",
+      "suggested_category": "STORMWATER",
+      "n": 25
+    },
+    {
+      "given_category": "SOLID_WASTE",
+      "suggested_category": "SEWERAGE_DRAINAGE",
+      "n": 21
+    },
+    {
+      "given_category": "SOLID_WASTE",
+      "suggested_category": "POLLUTION",
+      "n": 20
+    },
+    {
+      "given_category": "POLLUTION",
+      "suggested_category": "PUBLIC_SAFETY",
+      "n": 19
+    },
+    {
+      "given_category": "SOLID_WASTE",
+      "suggested_category": "PUBLIC_SAFETY",
+      "n": 18
+    },
+    {
+      "given_category": "SOLID_WASTE",
+      "suggested_category": "ROAD_INFRASTRUCTURE",
+      "n": 18
+    },
+    {
+      "given_category": "SEWERAGE_DRAINAGE",
+      "suggested_category": "STORMWATER",
+      "n": 17
+    }
+  ],
+  "mapping_concentration_investigations": 1,
+  "synthetic_self_check": {
+    "flip_rate": 0.05,
+    "injected_flips": 763,
+    "flagged_total": 1870,
+    "injected_flips_flagged": 467,
+    "recall_of_injected_flips": 0.6121,
+    "precision_at_N_injected": 0.4338,
+    "note": "Synthetic labels on a copy; the original dataset is untouched. Real label noise already present also produces flags, so precision here is a lower bound for detecting injected flips only and says nothing about real label accuracy."
+  },
+  "taxonomy_sha256_unchanged": true,
+  "runtime_seconds": 207.5,
+  "notice": "Flags are suspicious-label candidates for AI review, not confirmed errors."
+}

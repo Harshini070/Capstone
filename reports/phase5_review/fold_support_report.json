@@ -1,0 +1,328 @@
+{
+  "stage": "S3_fold_support",
+  "n_splits_requested": 5,
+  "min_train_per_class": 5,
+  "min_validation_per_class": 1,
+  "dropped_unsupported_classes": {},
+  "iterations": [
+    {
+      "n_folds": 5,
+      "classes": [
+        "ANIMAL_SERVICES",
+        "CIVIC_DOCUMENTS",
+        "ELECTRICITY",
+        "LAKES_WATERBODIES",
+        "PARKS_GREENSPACE",
+        "POLLUTION",
+        "PUBLIC_INFRASTRUCTURE",
+        "PUBLIC_SAFETY",
+        "PUBLIC_SANITATION",
+        "PUBLIC_TRANSPORT",
+        "ROAD_INFRASTRUCTURE",
+        "SEWERAGE_DRAINAGE",
+        "SOLID_WASTE",
+        "STORMWATER",
+        "STREETLIGHT",
+        "TRAFFIC_SAFETY",
+        "WATER_SUPPLY"
+      ],
+      "groups_per_class": {
+        "ANIMAL_SERVICES": 820,
+        "CIVIC_DOCUMENTS": 45,
+        "ELECTRICITY": 234,
+        "LAKES_WATERBODIES": 51,
+        "PARKS_GREENSPACE": 220,
+        "POLLUTION": 422,
+        "PUBLIC_INFRASTRUCTURE": 132,
+        "PUBLIC_SAFETY": 149,
+        "PUBLIC_SANITATION": 915,
+        "PUBLIC_TRANSPORT": 62,
+        "ROAD_INFRASTRUCTURE": 4969,
+        "SEWERAGE_DRAINAGE": 280,
+        "SOLID_WASTE": 3686,
+        "STORMWATER": 128,
+        "STREETLIGHT": 1354,
+        "TRAFFIC_SAFETY": 914,
+        "WATER_SUPPLY": 328
+      },
+      "per_class_fold_counts": {
+        "ANIMAL_SERVICES": {
+          "train": [
+            676,
+            677,
+            677,
+            677,
+            677
+          ],
+          "validation": [
+            170,
+            169,
+            169,
+            169,
+            169
+          ]
+        },
+        "CIVIC_DOCUMENTS": {
+          "train": [
+            40,
+            40,
+            40,
+            40,
+            40
+          ],
+          "validation": [
+            10,
+            10,
+            10,
+            10,
+            10
+          ]
+        },
+        "ELECTRICITY": {
+          "train": [
+            190,
+            190,
+            190,
+            191,
+            191
+          ],
+          "validation": [
+            48,
+            48,
+            48,
+            47,
+            47
+          ]
+        },
+        "LAKES_WATERBODIES": {
+          "train": [
+            43,
+            42,
+            43,
+            42,
+            42
+          ],
+          "validation": [
+            10,
+            11,
+            10,
+            11,
+            11
+          ]
+        },
+        "PARKS_GREENSPACE": {
+          "train": [
+            180,
+            180,
+            180,
+            180,
+            180
+          ],
+          "validation": [
+            45,
+            45,
+            45,
+            45,
+            45
+          ]
+        },
+        "POLLUTION": {
+          "train": [
+            339,
+            339,
+            338,
+            338,
+            338
+          ],
+          "validation": [
+            84,
+            84,
+            85,
+            85,
+            85
+          ]
+        },
+        "PUBLIC_INFRASTRUCTURE": {
+          "train": [
+            109,
+            108,
+            109,
+            109,
+            109
+          ],
+          "validation": [
+            27,
+            28,
+            27,
+            27,
+            27
+          ]
+        },
+        "PUBLIC_SAFETY": {
+          "train": [
+            120,
+            120,
+            120,
+            120,
+            120
+          ],
+          "validation": [
+            30,
+            30,
+            30,
+            30,
+            30
+          ]
+        },
+        "PUBLIC_SANITATION": {
+          "train": [
+            826,
+            825,
+            826,
+            826,
+            825
+          ],
+          "validation": [
+            206,
+            207,
+            206,
+            206,
+            207
+          ]
+        },
+        "PUBLIC_TRANSPORT": {
+          "train": [
+            50,
+            50,
+            50,
+            51,
+            51
+          ],
+          "validation": [
+            13,
+            13,
+            13,
+            12,
+            12
+          ]
+        },
+        "ROAD_INFRASTRUCTURE": {
+          "train": [
+            4086,
+            4087,
+            4087,
+            4086,
+            4086
+          ],
+          "validation": [
+            1022,
+            1021,
+            1021,
+            1022,
+            1022
+          ]
+        },
+        "SEWERAGE_DRAINAGE": {
+          "train": [
+            226,
+            226,
+            226,
+            227,
+            227
+          ],
+          "validation": [
+            57,
+            57,
+            57,
+            56,
+            56
+          ]
+        },
+        "SOLID_WASTE": {
+          "train": [
+            3096,
+            3096,
+            3096,
+            3096,
+            3096
+          ],
+          "validation": [
+            774,
+            774,
+            774,
+            774,
+            774
+          ]
+        },
+        "STORMWATER": {
+          "train": [
+            103,
+            102,
+            102,
+            103,
+            102
+          ],
+          "validation": [
+            25,
+            26,
+            26,
+            25,
+            26
+          ]
+        },
+        "STREETLIGHT": {
+          "train": [
+            1176,
+            1176,
+            1176,
+            1176,
+            1176
+          ],
+          "validation": [
+            294,
+            294,
+            294,
+            294,
+            294
+          ]
+        },
+        "TRAFFIC_SAFETY": {
+          "train": [
+            766,
+            767,
+            766,
+            766,
+            767
+          ],
+          "validation": [
+            192,
+            191,
+            192,
+            192,
+            191
+          ]
+        },
+        "WATER_SUPPLY": {
+          "train": [
+            263,
+            264,
+            263,
+            263,
+            263
+          ],
+          "validation": [
+            66,
+            65,
+            66,
+            66,
+            66
+          ]
+        }
+      },
+      "group_leakage": [],
+      "every_record_predicted_exactly_once": true,
+      "unsupported_classes": {},
+      "valid": true
+    }
+  ]
+}

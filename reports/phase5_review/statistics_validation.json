@@ -1,0 +1,195 @@
+{
+  "stage": "S9_statistics_validation",
+  "generated_at_utc": "2026-11-15T16:39:00.281691+00:00",
+  "design": [
+    {
+      "stratum": "ANIMAL_SERVICES",
+      "N_h": 846,
+      "n_h": 30
+    },
+    {
+      "stratum": "CIVIC_DOCUMENTS",
+      "N_h": 50,
+      "n_h": 30
+    },
+    {
+      "stratum": "ELECTRICITY",
+      "N_h": 238,
+      "n_h": 30
+    },
+    {
+      "stratum": "EMPLOYEE_GRIEVANCES",
+      "N_h": 1,
+      "n_h": 1
+    },
+    {
+      "stratum": "FIRE_EMERGENCY",
+      "N_h": 10,
+      "n_h": 10
+    },
+    {
+      "stratum": "LAKES_WATERBODIES",
+      "N_h": 53,
+      "n_h": 30
+    },
+    {
+      "stratum": "PARKS_GREENSPACE",
+      "N_h": 225,
+      "n_h": 30
+    },
+    {
+      "stratum": "POLLUTION",
+      "N_h": 423,
+      "n_h": 30
+    },
+    {
+      "stratum": "PUBLIC_INFRASTRUCTURE",
+      "N_h": 136,
+      "n_h": 30
+    },
+    {
+      "stratum": "PUBLIC_SAFETY",
+      "N_h": 150,
+      "n_h": 30
+    },
+    {
+      "stratum": "PUBLIC_SANITATION",
+      "N_h": 1032,
+      "n_h": 30
+    },
+    {
+      "stratum": "PUBLIC_TRANSPORT",
+      "N_h": 63,
+      "n_h": 30
+    },
+    {
+      "stratum": "ROAD_INFRASTRUCTURE",
+      "N_h": 5108,
+      "n_h": 30
+    },
+    {
+      "stratum": "SEWERAGE_DRAINAGE",
+      "N_h": 283,
+      "n_h": 30
+    },
+    {
+      "stratum": "SOCIAL_WELFARE",
+      "N_h": 1,
+      "n_h": 1
+    },
+    {
+      "stratum": "SOLID_WASTE",
+      "N_h": 3870,
+      "n_h": 30
+    },
+    {
+      "stratum": "STORMWATER",
+      "N_h": 128,
+      "n_h": 30
+    },
+    {
+      "stratum": "STREETLIGHT",
+      "N_h": 1470,
+      "n_h": 30
+    },
+    {
+      "stratum": "TRAFFIC_SAFETY",
+      "N_h": 958,
+      "n_h": 30
+    },
+    {
+      "stratum": "WATER_SUPPLY",
+      "N_h": 329,
+      "n_h": 30
+    }
+  ],
+  "simulations_per_population": 1000,
+  "bootstrap_replicates_per_simulation": 500,
+  "seed": 42,
+  "criteria": {
+    "max_abs_bias": 0.005,
+    "overall_coverage_range": [
+      0.93,
+      0.97
+    ],
+    "wilson_fpc_min_mean_coverage": 0.93
+  },
+  "hand_calculated_checks": {
+    "two_strata_estimate_ok": true,
+    "two_strata_variance_ok": true,
+    "census_stratum_zero_variance_ok": true,
+    "wilson_census_exact_ok": true,
+    "korn_graubard_zero_events_ok": true
+  },
+  "results": {
+    "uniform_5pct": {
+      "true_proportion": 0.049954,
+      "mean_estimate": 0.049683,
+      "bias": -0.000272,
+      "empirical_sd": 0.01769,
+      "coverage_korn_graubard": 0.935,
+      "mean_width_korn_graubard": 0.072903,
+      "coverage_taylor": 0.896,
+      "coverage_rao_wu_bootstrap": 0.913,
+      "mean_width_bootstrap": 0.064918,
+      "wilson_fpc_mean_coverage": 0.9536,
+      "wilson_fpc_min_coverage": 0.916,
+      "degenerate": false
+    },
+    "uniform_30pct": {
+      "true_proportion": 0.299987,
+      "mean_estimate": 0.301252,
+      "bias": 0.001265,
+      "empirical_sd": 0.038232,
+      "coverage_korn_graubard": 0.957,
+      "mean_width_korn_graubard": 0.150211,
+      "coverage_taylor": 0.944,
+      "coverage_rao_wu_bootstrap": 0.938,
+      "mean_width_bootstrap": 0.143407,
+      "wilson_fpc_mean_coverage": 0.9454,
+      "wilson_fpc_min_coverage": 0.919,
+      "degenerate": false
+    },
+    "heterogeneous_0_to_1": {
+      "true_proportion": 0.657864,
+      "mean_estimate": 0.65717,
+      "bias": -0.000694,
+      "empirical_sd": 0.036171,
+      "coverage_korn_graubard": 0.947,
+      "mean_width_korn_graubard": 0.145026,
+      "coverage_taylor": 0.936,
+      "coverage_rao_wu_bootstrap": 0.938,
+      "mean_width_bootstrap": 0.138984,
+      "wilson_fpc_mean_coverage": 0.9634,
+      "wilson_fpc_min_coverage": 0.938,
+      "degenerate": false
+    },
+    "boundary_all_zero": {
+      "true_proportion": 0.0,
+      "mean_estimate": 0.0,
+      "bias": 0.0,
+      "empirical_sd": 0.0,
+      "coverage_korn_graubard": 1.0,
+      "mean_width_korn_graubard": 0.007043,
+      "coverage_taylor": 1.0,
+      "coverage_rao_wu_bootstrap": 1.0,
+      "mean_width_bootstrap": 0.0,
+      "wilson_fpc_mean_coverage": 1.0,
+      "wilson_fpc_min_coverage": 1.0,
+      "degenerate": true
+    }
+  },
+  "primary_interval_method": "Korn-Graubard (1998) design-effective-size Clopper-Pearson",
+  "cross_check_methods": [
+    "Taylor (normal, design variance with FPC)",
+    "Rao-Wu rescaling bootstrap, percentile"
+  ],
+  "cross_check_notes": [
+    "uniform_5pct: coverage_taylor 0.896 outside 0.93-0.97",
+    "uniform_5pct: coverage_rao_wu_bootstrap 0.913 outside 0.93-0.97"
+  ],
+  "failures": [],
+  "passed": true,
+  "method_history": "v1 used the Rao-Wu percentile bootstrap as the primary interval; its synthetic coverage at a 5% true rate was 0.913 (Taylor 0.896), below the 0.93 criterion, so the primary method was changed to Korn-Graubard. Taylor and Rao-Wu are kept as cross-checks.",
+  "note": "Synthetic populations with exactly known proportions, sampled with the real S1 design."
+}

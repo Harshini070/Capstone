@@ -1,0 +1,75 @@
+{
+  "stage": "S2_corpus_screens",
+  "screen_version": "phase5_screens_v1",
+  "generated_at_utc": "2026-11-15T16:29:18.460175+00:00",
+  "input_file": "data\\processed\\translated_bengaluru_preprocessed_v2_cleaning_candidate.csv",
+  "records": 15374,
+  "notice": "Aggregate counts only. Flags prioritise review; none clears a record.",
+  "privacy": {
+    "records_with_regex_flag": 2264,
+    "flag_occurrences_by_type": {
+      "ADDRESS_PATTERN": 1708,
+      "DOOR_NUMBER": 145,
+      "INDIAN_MOBILE": 19,
+      "NAME_CUE": 149,
+      "PIN_CODE": 335,
+      "VEHICLE_REGISTRATION": 260
+    },
+    "note": "Regex flags are neither proof of PII nor of its absence. 239 records were already held out upstream by experimental_privacy_exclusion_manifest.csv and are not in this input."
+  },
+  "duplicates": {
+    "exact_groups_size_gt_1": 235,
+    "records_in_exact_groups": 880,
+    "near_duplicate_pairs_verified": 5231,
+    "dedup_groups_total": 14683,
+    "dedup_groups_size_gt_1": 276,
+    "records_in_dedup_groups_size_gt_1": 967,
+    "largest_dedup_group": 76,
+    "groups_with_min_pairwise_jaccard_below_0_90": 0,
+    "chaining_note": "Union-find can chain dissimilar texts transitively; this counts groups where any pair falls below the threshold.",
+    "method": "SHA-256 of NFC/whitespace/casefold-normalised cleaned title+description; character 5-gram MinHash (128 perms, 16 bands x 8 rows), Jaccard >= 0.90 verified exactly; union-find"
+  },
+  "artifacts": {
+    "records_with_raw_dot_run": 13107,
+    "records_with_residual_dot_run_after_cleaning": 6,
+    "flag_counts": {
+      "description_near_empty": 1,
+      "description_repeated_punctuation": 83,
+      "description_repeated_token_run": 24,
+      "description_residual_dot_run": 6,
+      "title_near_empty": 2,
+      "title_repeated_punctuation": 28,
+      "title_repeated_token_run": 23
+    }
+  },
+  "text_quality": {
+    "empty_title": 0,
+    "empty_description": 0,
+    "title_description_identical": 2481,
+    "low_telugu_ratio_lt_0_5": 31,
+    "very_short_text_lt_15_telugu_letters": 6
+  },
+  "translation_signals": {
+    "semantic_signal_status": "NOT_EVALUATED",
+    "semantic_signal_note": "sentence-transformers not installed",
+    "number_mismatch_flag": 936,
+    "length_ratio_flag": 307,
+    "length_ratio_bounds_p01_p99": [
+      0.7097,
+      1.7157
+    ],
+    "entity_check_status": "NOT_EVALUATED",
+    "note": "Number and length heuristics are quality indicators, not semantic validation."
+  },
+  "category_preservation": {
+    "flag_counts": {
+      "both_signals_disagree_with_given_label": 816,
+      "source_vs_translation_category_conflict": 1152
+    },
+    "records_with_english_signal": 10391,
+    "records_with_telugu_rule_signal": 9777,
+    "note": "Signals only; the taxonomy and mappings are never changed automatically."
+  },
+  "records_with_any_flag": 4774,
+  "taxonomy_sha256_unchanged": true
+}

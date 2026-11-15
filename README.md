@@ -24,16 +24,39 @@ Telugu municipal complaints.
 | 1–2. Source discovery, governance, corpus preparation | Complete |
 | 3. Dataset quality and preprocessing | Complete |
 | 4. Telugu NLP pipeline foundation | Complete |
-| 5. Translation-artifact cleanup, quality and eligibility audit | In progress |
+| 5. AI-assisted corpus review | Gate 2 complete (engineering, S1–S3 run); Gate 3 (AI review) not started |
+| ML training (Part F) | Not started; needs separate approval |
 
-The working corpus is 15,374 Bengaluru complaints machine-translated into
-Telugu. It is **not** authentic GHMC data. The Phase 5 eligibility audit
-(`reports/phase5_training_eligibility_audit.json`) cleared **0** records for
-model training: all records still await manual privacy review, and most
-contain translation artifacts. The category taxonomy is
-`PROVISIONAL_NOT_APPROVED`.
+The working corpus is **a translated experimental corpus derived from
+Bengaluru/BBMP municipal complaint data**: 15,374 records machine-translated
+into Telugu. It is **not** authentic Hyderabad/GHMC citizen complaint data.
+Under the historical audit policy, 0 records are cleared for model training.
+The category taxonomy is `PROVISIONAL_NOT_APPROVED`.
 
-Milestone reports are in [docs/research/](docs/research/).
+Milestone reports are in [docs/research/](docs/research/). The running log of
+every major step and decision is
+[GrievanceHub_Phase5_Development_Log.md](docs/research/GrievanceHub_Phase5_Development_Log.md).
+
+## Phase 5: AI-assisted corpus review
+
+**Disclosure:** corpus review in Phase 5 is done by an AI model
+(`review_method = AI_ASSISTED`). There is no human annotation. Two AI passes
+measure self-consistency only, not ground truth. The protocol is in
+[GrievanceHub_Phase5_AI_Review_Protocol.md](docs/research/GrievanceHub_Phase5_AI_Review_Protocol.md).
+
+| Stage | Script | Output (record-level outputs are Git-ignored) |
+|---|---|---|
+| S1 Rebuild review sample | `scripts/phase5_build_review_sample_v2.py` | `data/interim/review/phase5_review_sample_v2.csv` |
+| S2 Automated screens | `scripts/phase5_corpus_screens.py` | `corpus_screens.csv`, `reports/phase5_review/screens_summary.json` |
+| S3 Label-noise detection | `scripts/phase5_label_noise_detection.py` | `label_noise_flags.csv`, `label_noise_summary.json`, `mapping_concentration.csv` |
+| S4–S6 Review batches | `scripts/phase5_review_batches.py` | `review_queue.csv`, batch files, `review_pass1.csv`, `review_pass2.csv` |
+| S7 Consistency | `scripts/phase5_review_consistency.py` | `review_final.csv`, `consistency_report.json` |
+| S8 Eligibility, dataset v3 | `scripts/phase5_apply_review_decisions.py` | `data/processed/translated_bengaluru_reviewed_v3.csv`, `eligibility_summary.json` |
+| S9 Statistics | `scripts/phase5_review_statistics.py validate` / `estimate` | `statistics_validation.json`, `population_estimates.csv` |
+
+Eligibility audit: `python scripts/phase5_training_eligibility_audit.py`
+(historical default policy, unchanged) or `--policy ai_assisted_v1` (reads
+dataset v3).
 
 ## Architecture
 

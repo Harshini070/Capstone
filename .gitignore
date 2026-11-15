@@ -62,3 +62,8 @@ npm-debug.log*
 reports/*_record_level.csv
 reports/phase5_translation_artifact_review.csv
 reports/phase5_telugu_quality_review.csv
+
+# Phase 5 AI review: record-level files must never be committed.
+# (data/interim/* and data/processed/* are already ignored above.)
+reports/phase5_review/*record_level*
+reports/phase5_review/*_records.csv

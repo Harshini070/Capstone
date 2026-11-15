@@ -10,5 +10,9 @@ PyYAML==6.0.3
 regex==2026.9.29
 requests==2.34.2
 
+# Phase 5 label-noise detection and survey statistics
+scikit-learn==1.9.1
+scipy==1.17.1
+
 # NLP service (also needed to run its tests from the project root)
 -r nlp-service/requirements.txt

@@ -1,0 +1,7 @@
+# Optional: LaBSE cross-language similarity for the Phase 5 S2 translation-
+# quality signal (scripts/phase5_corpus_screens.py).
+# Not installed by default: the LaBSE model download is about 1.8 GB and runs
+# on CPU here. Without it the signal is recorded as NOT_EVALUATED.
+# Install only after approval, then pin the installed version below.
+-r requirements.txt
+sentence-transformers
