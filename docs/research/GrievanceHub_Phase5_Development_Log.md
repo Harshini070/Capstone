@@ -102,7 +102,7 @@ A running record of every major step, decision and result in Phase 5. Entries ar
 | INDIAN_MOBILE | 19 |
 
 These numbers count records per type; the figures counted per field are larger.
-- **Finding:** real-looking mobile numbers (for example, `98806 09192`) are still in the working dataset. The upstream privacy manifest's pattern didn't allow a space inside the number, so it missed them. Such records will be quarantined unless reviewed.
+- **Finding:** real mobile numbers written with a space (for example `98XXX XXXXX`; the real example is redacted here) are still in the working dataset. The upstream privacy manifest's pattern didn't allow a space inside the number, so it missed them. Such records will be quarantined unless reviewed.
 - A spot-check showed that most ADDRESS_PATTERN and "Sri" NAME_CUE matches are locations or place names. As designed, they only set review priority.
 
 **Duplicates:**
@@ -347,3 +347,93 @@ Pass 1 now covers **400 records**. In the 100 new reviews: ACCEPT 24, ACCEPT_WIT
 python scripts/phase5_review_batches.py export --pass 1 --size 25   # next: P1-B0017
 ```
 Remaining for pass 1: 122 sample records and 1,450 flagged records.
+
+---
+
+## 2026-11-15 (continued): Option B approved; subset-aware tooling; P1-B0017; taxonomy comparison; isolation check
+
+### User decisions (2026-11-15)
+- **Option B (sample first) approved.** The order is:
+  1. Finish pass 1 on the 522-record sample.
+  2. Freeze the taxonomy.
+  3. Blind pass 2 on the 522.
+  4. Compare and adjudicate.
+  5. Sample statistics.
+  6. Flagged records: pass 1, pass 2, adjudication.
+  7. Dataset v3.
+  8. Gate 4 audit and milestone report.
+  9. **Stop before ML.**
+- **Taxonomy v1.1.** Not applied; a detailed v1.0 vs v1.1 comparison was requested first. v1.0 must stay unchanged, and both passes must use the same frozen version.
+- **Pass 2 with fresh subagents.** Conditionally approved, provided context isolation is verified first. Agreement is to be reported as AI self-consistency, never as human inter-annotator reliability.
+- **Statistics.** The implementation must be validated on synthetic populations before any estimate. Only the 522-record sample feeds population estimates; flagged results are reported separately, with no double counting.
+- **LaBSE.** Not installed; semantic evaluation stays `NOT_EVALUATED`. The number, length and artifact checks are not semantic validation.
+- **Process.** Batch size stays 25. Commits stay local; pushing needs explicit approval. Any ML training step must be flagged to the user first so it can run in Google Colab.
+
+### Tooling: subset-aware export and preflight (`phase5_review_batches.py`)
+- **`export --subset {sample,flagged,all}` is now required.**
+  - A batch never mixes the random sample with flagged-only records. Sample records that were also flagged stay in `sample`.
+  - Without this, the final sample batch would have taken 3 flagged records (122 = 4×25 + 22).
+  - Pass-2 order is a seeded shuffle within the subset.
+- **Every export runs `preflight` and refuses on any failure.** The checks:
+  - queue IDs are unique;
+  - no record appears in two batches of the same pass;
+  - no candidate record is already reviewed;
+  - every candidate belongs to the requested subset;
+  - all earlier manifests used the current protocol version and taxonomy version (manifests from before this change count as v1.0, the only registry that existed then);
+  - for pass 2, every record in the subset has a validated pass-1 review.
+- **Manifests now record** `taxonomy_version`, `taxonomy_sha256`, `subset` and per-record `membership` (SAMPLE / SAMPLE_AND_FLAG / FLAGGED).
+- **`status` reports** progress by subset, plus the taxonomy and protocol versions.
+- **Tests.** `test_subset_filter_never_spills_into_flagged` and `test_preflight_catches_duplicates_subset_and_versions` were added. The suite has **69 tests, all passing**.
+
+### Progress
+| Batch | Records | Subset / membership | Taxonomy | Reviewer model | Status |
+|---|---|---|---|---|---|
+| P1-B0017 | 25 (SOLID_WASTE / STORMWATER) | sample: 22 SAMPLE, 3 SAMPLE_AND_FLAG | 1.0 | claude-opus-5-5 | VALIDATED on the first attempt |
+
+- Pass 1 on the sample now stands at **425 of 522**. All 17 pass-1 batches are sample records, and none are flagged-only.
+- **Conventions used in P1-B0017:**
+  - "Drinage" translated as drinking water (తాగునీరు) throughout a record → REJECT with TRANSLATION_MEANING_SHIFT;
+  - a site (plot) number in a layout counts as a door number → PII_IDENTIFIED;
+  - a stinking lake (kere) filed under storm drains → relabelled LAKES_WATERBODIES;
+  - debris left after storm-drain repair → AMBIGUOUS (SOLID_WASTE as secondary).
+
+### Taxonomy v1.0 vs v1.1 comparison
+- Written to `docs/research/GrievanceHub_Taxonomy_v1.0_vs_v1.1_Comparison.md`.
+- **Corpus.** 589 corpus records would change target (600 in the raw file). PUBLIC_SANITATION would go from 1,032 to 466 records, and PUBLIC_TRANSPORT from 63 to 45.
+- **Join method.** Records were linked to the raw data with `raw row = source_record_id − 1`; titles matched for 100% of records.
+- **Sample.** 29 sample records would change label, all already reviewed:
+  - 24 have a pass-1 category equal to the v1.1 target;
+  - 2 are rejected and unaffected;
+  - 3 need reassessment (BG-TEL-15502, 15132, 15791).
+- **Flagged-only set.** 205 records would carry a different given label; none are reviewed yet.
+- **The remaining 97 sample records are unaffected by v1.1,** so pass 1 can continue under v1.0 while the decision is pending.
+- The record-level impact list is at `data/interim/review/taxonomy_v11_affected_pass1.csv` (Git-ignored).
+- **Waiting for an explicit user decision.**
+
+### Isolation check for pass-2 subagents
+- **Test.** One fresh general-purpose subagent was given a canary prompt: no tools allowed, and questions about earlier history, the last validated batch and a pass-1 decision.
+- **Result.**
+  - It reported no earlier conversation history.
+  - It answered UNKNOWN for the batch ID and the record decision.
+  - It echoed the canary token correctly.
+  - A transcript audit found exactly one tool call, `SubagentHandback` (delivering the report), and no file, search or shell calls.
+- **Limitations found.**
+  1. **Auto-injected context.** Each subagent automatically receives the session's git status with recent commit messages and the user's memory index. Neither contains record-level decisions, but commit messages mention process facts (for example "pending taxonomy v1.1 subcategory proposal"). The canary picked up exactly this.
+  2. **File access is not technically blocked.** A general-purpose subagent could read pass-1 outputs or this log, which names some record IDs with their decisions. Isolation therefore relies on: (a) putting the protocol, taxonomy and records directly in the prompt so no tool is needed; (b) an instruction forbidding tools; (c) a **mandatory transcript audit after every batch**, where any tool call other than `SubagentHandback` invalidates the batch and it is redone.
+  3. **Same model.** Pass 2 uses the same model (`claude-opus-5-5`), so agreement measures AI self-consistency across isolated sessions.
+- **Waiting for the user** to accept this verified-by-audit isolation or require something stronger.
+
+### Remaining workload
+- Pass 1, sample: 97 records (P1-B0018 to P1-B0021; the last batch has 22 records).
+- Pass 1, flagged: 1,450 records.
+- Pass 2 and adjudication: not started.
+
+### Privacy fix: a real phone number in tracked files
+- **Found by** the pre-commit PII scan. A real mobile number from the source dataset was used as a test fixture in `tests/test_phase5_review.py` (3 places) and quoted as an example in this log.
+- **Exposure.** It entered the history in `0edb11a` and `2425703`, both pushed to `origin/main`.
+- **Fix in this commit.**
+  - The test fixtures now use the synthetic `98765 43210`, which still exercises the spaced-number pattern.
+  - The log example is redacted.
+  - Tests still pass.
+- **Still open.** The number remains in **Git history on GitHub**. Removing it needs a history rewrite (for example `git filter-repo` plus a force push) or deleting and recreating the repository. That is a destructive, outward-facing action and needs the user's decision.
+- **New rule.** Test fixtures use synthetic identifiers only, never values copied from the data.

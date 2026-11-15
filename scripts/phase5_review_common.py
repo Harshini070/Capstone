@@ -80,6 +80,11 @@ DEFAULT_REVIEWER_MODEL = "claude-opus-5-5"
 RANDOM_SEED = 42
 SAMPLE_PER_CATEGORY = 30
 
+
+def taxonomy_version(taxonomy_path: Path = TAXONOMY_PATH) -> str:
+    """Version string of the frozen taxonomy registry used for review."""
+    return str(json.loads(Path(taxonomy_path).read_text(encoding="utf-8"))["version"])
+
 REVIEW_PASSES = ("1", "2", "ADJUDICATION")
 
 RARE_CLASSES = frozenset(

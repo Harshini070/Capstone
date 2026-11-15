@@ -146,7 +146,7 @@ class PIIDetectionTests(unittest.TestCase):
         return {h["type"] for h in s2.detect_pii({field: text})}
 
     def test_flags_identifiers(self):
-        self.assertIn("INDIAN_MOBILE", self.types("call me on 98806 09192 please"))
+        self.assertIn("INDIAN_MOBILE", self.types("call me on 98765 43210 please"))
         self.assertIn("INDIAN_MOBILE", self.types("+91 9876543210"))
         self.assertIn("EMAIL", self.types("mail abc.def@example.com"))
         self.assertIn("VEHICLE_REGISTRATION", self.types("car KA 01 AB 1234 parked"))
@@ -164,7 +164,7 @@ class PIIDetectionTests(unittest.TestCase):
         self.assertNotIn("PIN_CODE", self.types("amount 123456 spent"))
 
     def test_output_is_flag_with_method(self):
-        hit = s2.detect_pii({"source_title": "98806 09192"})[0]
+        hit = s2.detect_pii({"source_title": "98765 43210"})[0]
         self.assertEqual(set(hit), {"type", "field", "text", "method"})
 
 
@@ -329,8 +329,43 @@ class BatchAndOverlapTests(unittest.TestCase):
                                                        source_text=SOURCE, telugu_text=TELUGU), [])
         with self.assertRaises(ValueError):
             batches.compile_psv(psv.replace("|RL|", "|XX|"), "P1-B0001", "1", "m", "t")
-        spans = batches.parse_pii_cell("INDIAN_MOBILE~source_description~98806 09192")
+        spans = batches.parse_pii_cell("INDIAN_MOBILE~source_description~98765 43210")
         self.assertEqual(spans[0]["type"], "INDIAN_MOBILE")
+
+    def _queue(self):
+        return pd.DataFrame({
+            "record_id": ["S1", "S2", "S3", "F1", "F2"],
+            "in_random_sample": ["True", "True", "True", "False", "False"],
+            "in_flagged_set": ["False", "True", "False", "True", "True"],
+            "review_priority": ["1", "2", "3", "4", "5"],
+        })
+
+    def test_subset_filter_never_spills_into_flagged(self):
+        queue = self._queue()
+        prior = [{"batch_id": "P1-B0001", "record_ids": ["S1", "S2"],
+                  "protocol_version": common.PROTOCOL_VERSION}]
+        ids = batches.next_batch_ids("1", 25, "sample", queue, prior)
+        self.assertEqual(ids, ["S3"])
+        self.assertEqual(batches.next_batch_ids("1", 25, "flagged", queue, prior), ["F1", "F2"])
+        self.assertEqual(batches.membership(queue)["S2"], "SAMPLE_AND_FLAG")
+        self.assertIn("S2", batches.subset_ids(queue, "sample"))
+        self.assertNotIn("S2", batches.subset_ids(queue, "flagged"))
+
+    def test_preflight_catches_duplicates_subset_and_versions(self):
+        queue = self._queue()
+        prior = [{"batch_id": "P1-B0001", "record_ids": ["S1"], "protocol_version": common.PROTOCOL_VERSION},
+                 {"batch_id": "P1-B0002", "record_ids": ["S1"], "protocol_version": "old",
+                  "taxonomy_version": "9.9"}]
+        joined = " ".join(batches.preflight("1", "sample", ["S1", "F1"], queue, prior))
+        self.assertIn("already in P1-B0001 and P1-B0002", joined)
+        self.assertIn("already reviewed", joined)
+        self.assertIn("outside subset 'sample'", joined)
+        self.assertIn("used protocol old", joined)
+        self.assertIn("used taxonomy 9.9", joined)
+        ok = batches.preflight("1", "sample", ["S2"], queue, prior[:1])
+        self.assertEqual(ok, [])
+        gate = batches.preflight("2", "sample", ["S1"], queue, [], pass1_done={"S1"})
+        self.assertIn("no validated pass-1 review", " ".join(gate))
 
     def test_pass2_order_is_seeded_permutation(self):
         ids = [f"R{i}" for i in range(50)]

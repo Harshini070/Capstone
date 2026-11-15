@@ -168,29 +168,114 @@ def pass2_order(record_ids: list[str], seed: int = common.RANDOM_SEED) -> list[s
     return [ordered[i] for i in rng.permutation(len(ordered))]
 
 
-def next_batch_ids(review_pass: str, size: int) -> list[str]:
-    done = {rid for m in manifests(review_pass) for rid in m["record_ids"]}
+# Review subsets. "sample" = the 522-record stratified random sample (the only
+# records that feed population estimates, including sample records that were
+# also flagged); "flagged" = flagged-only records (non-random, reported
+# separately). A batch never mixes the two.
+SUBSETS = ("sample", "flagged", "all")
+
+
+def membership(queue: pd.DataFrame) -> dict[str, str]:
+    """record_id -> SAMPLE | SAMPLE_AND_FLAG | FLAGGED."""
+    out = {}
+    for rec in queue.to_dict("records"):
+        in_sample = str(rec["in_random_sample"]) == "True"
+        flagged = str(rec["in_flagged_set"]) == "True"
+        out[rec["record_id"]] = ("SAMPLE_AND_FLAG" if in_sample and flagged
+                                 else "SAMPLE" if in_sample else "FLAGGED")
+    return out
+
+
+def subset_ids(queue: pd.DataFrame, subset: str) -> set[str]:
+    if subset not in SUBSETS:
+        raise ValueError(f"subset must be one of {SUBSETS}")
+    member = membership(queue)
+    if subset == "all":
+        return set(member)
+    want_sample = subset == "sample"
+    return {rid for rid, m in member.items() if m.startswith("SAMPLE") == want_sample}
+
+
+def _load_queue() -> pd.DataFrame:
+    return common.read_csv(common.REVIEW_QUEUE_PATH)
+
+
+def next_batch_ids(review_pass: str, size: int, subset: str = "all",
+                   queue: pd.DataFrame | None = None,
+                   prior: list[dict] | None = None) -> list[str]:
+    queue = _load_queue() if queue is None else queue
+    prior = manifests(review_pass) if prior is None else prior
+    done = {rid for m in prior for rid in m["record_ids"]}
+    allowed = subset_ids(queue, subset)
     if review_pass == "1":
-        queue = common.read_csv(common.REVIEW_QUEUE_PATH)
         queue = queue.sort_values("review_priority", key=lambda s: s.astype(int))
-        candidates = queue["record_id"].tolist()
+        candidates = [rid for rid in queue["record_id"] if rid in allowed]
     elif review_pass == "2":
         pass1 = common.review_pass_path("1")
         if not pass1.exists():
             raise SystemExit("Merge pass 1 before exporting pass-2 batches.")
-        candidates = pass2_order(common.read_csv(pass1)["record_id"].tolist())
+        # Shuffle within the subset so the order is independent of pass 1.
+        reviewed = set(common.read_csv(pass1)["record_id"])
+        candidates = pass2_order(sorted(reviewed & allowed))
     else:
         if not ADJUDICATION_QUEUE_PATH.exists():
             raise SystemExit("Run phase5_review_consistency.py compare first.")
-        candidates = common.read_csv(ADJUDICATION_QUEUE_PATH)["record_id"].tolist()
+        candidates = [rid for rid in common.read_csv(ADJUDICATION_QUEUE_PATH)["record_id"]
+                      if rid in allowed]
     return [rid for rid in candidates if rid not in done][:size]
 
 
-def export_batch(review_pass: str, size: int) -> Path | None:
-    ids = next_batch_ids(review_pass, size)
+def preflight(review_pass: str, subset: str, ids: list[str], queue: pd.DataFrame,
+              prior: list[dict], pass1_done: set[str] | None = None) -> list[str]:
+    """Checks run before every export. Returns a list of problems (empty = OK)."""
+    problems = []
+    if not queue["record_id"].is_unique:
+        problems.append("review queue has duplicate record_id values")
+    seen = {}
+    for m in prior:
+        for rid in m["record_ids"]:
+            if rid in seen:
+                problems.append(f"{rid} already in {seen[rid]} and {m['batch_id']}")
+            seen[rid] = m["batch_id"]
+    if len(ids) != len(set(ids)):
+        problems.append("candidate batch has duplicate record_id values")
+    again = [rid for rid in ids if rid in seen]
+    if again:
+        problems.append(f"records already reviewed in this pass: {again}")
+    outside = sorted(set(ids) - subset_ids(queue, subset))
+    if outside:
+        problems.append(f"records outside subset '{subset}': {outside}")
+    tax = common.taxonomy_version()
+    for m in prior:
+        if m.get("protocol_version") != common.PROTOCOL_VERSION:
+            problems.append(f"{m['batch_id']} used protocol {m.get('protocol_version')}, "
+                            f"current is {common.PROTOCOL_VERSION}")
+        # Batches exported before versions were recorded were all reviewed
+        # under the only registry that existed then (v1.0).
+        used = m.get("taxonomy_version", "1.0")
+        if used != tax:
+            problems.append(f"{m['batch_id']} used taxonomy {used}, current is {tax}; "
+                            "both passes must use the same frozen version")
+    if review_pass == "2" and subset != "all" and pass1_done is not None:
+        pending = sorted(subset_ids(queue, subset) - pass1_done)
+        if pending:
+            problems.append(f"{len(pending)} '{subset}' records have no validated pass-1 review; "
+                            "finish pass 1 for the subset before pass 2")
+    return problems
+
+
+def export_batch(review_pass: str, size: int, subset: str = "all") -> Path | None:
+    queue = _load_queue()
+    prior = manifests(review_pass)
+    ids = next_batch_ids(review_pass, size, subset, queue, prior)
     if not ids:
-        print(f"No pending records for pass {review_pass}.")
+        print(f"No pending '{subset}' records for pass {review_pass}.")
         return None
+    pass1_done = {rid for m in manifests("1") if m["status"] == "VALIDATED" for rid in m["record_ids"]}
+    problems = preflight(review_pass, subset, ids, queue, prior, pass1_done)
+    if problems:
+        raise SystemExit("Preflight failed:\n  - " + "\n  - ".join(problems))
+    member = membership(queue)
     number = len(manifests(review_pass)) + 1
     batch_id = f"{PASS_PREFIX[review_pass]}-B{number:04d}"
     lookup = _record_lookup()
@@ -213,6 +298,10 @@ def export_batch(review_pass: str, size: int) -> Path | None:
         "batch_id": batch_id,
         "review_pass": review_pass,
         "protocol_version": common.PROTOCOL_VERSION,
+        "taxonomy_version": common.taxonomy_version(),
+        "taxonomy_sha256": common.file_sha256(common.TAXONOMY_PATH),
+        "subset": subset,
+        "membership": {rid: member[rid] for rid in ids},
         "created_at_utc": _now(),
         "record_ids": ids,
         "input_sha256": common.file_sha256(input_path),
@@ -221,6 +310,9 @@ def export_batch(review_pass: str, size: int) -> Path | None:
         "validated_at_utc": None,
     }
     common.write_json(manifest, folder / f"{batch_id}_manifest.json")
+    counts = pd.Series(list(manifest["membership"].values())).value_counts().to_dict()
+    print(f"Preflight OK (subset={subset}, protocol={common.PROTOCOL_VERSION}, "
+          f"taxonomy={manifest['taxonomy_version']}, membership={counts})")
     print(f"Exported {batch_id}: {len(ids)} records -> {input_path}")
     return input_path
 
@@ -423,6 +515,15 @@ def status() -> dict:
         total = len(common.read_csv(common.REVIEW_QUEUE_PATH))
         report["1"]["queue_records"] = total
         report["1"]["records_not_yet_exported"] = total - sum(len(m["record_ids"]) for m in manifests("1"))
+        queue = _load_queue()
+        for review_pass in common.REVIEW_PASSES:
+            done = {rid for m in manifests(review_pass) if m["status"] == "VALIDATED"
+                    for rid in m["record_ids"]}
+            report[review_pass]["validated_by_subset"] = {
+                s: f"{len(done & subset_ids(queue, s))}/{len(subset_ids(queue, s))}"
+                for s in ("sample", "flagged")}
+        report["taxonomy_version"] = common.taxonomy_version()
+        report["protocol_version"] = common.PROTOCOL_VERSION
     return report
 
 
@@ -435,6 +536,8 @@ def main(argv=None):
     e = sub.add_parser("export")
     e.add_argument("--pass", dest="review_pass", choices=common.REVIEW_PASSES, required=True)
     e.add_argument("--size", type=int, default=25)
+    e.add_argument("--subset", choices=SUBSETS, required=True,
+                   help="sample = 522-record random sample; flagged = flagged-only records")
     v = sub.add_parser("validate")
     v.add_argument("--pass", dest="review_pass", choices=common.REVIEW_PASSES, required=True)
     v.add_argument("--batch-id", required=True)
@@ -450,7 +553,7 @@ def main(argv=None):
     if args.command == "build-queue":
         cmd_build_queue(args)
     elif args.command == "export":
-        export_batch(args.review_pass, args.size)
+        export_batch(args.review_pass, args.size, args.subset)
     elif args.command == "validate":
         errors = validate_batch(args.review_pass, args.batch_id)
         if errors:
