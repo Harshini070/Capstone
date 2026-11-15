@@ -437,3 +437,59 @@ Remaining for pass 1: 122 sample records and 1,450 flagged records.
   - Tests still pass.
 - **Still open.** The number remains in **Git history on GitHub**. Removing it needs a history rewrite (for example `git filter-repo` plus a force push) or deleting and recreating the repository. That is a destructive, outward-facing action and needs the user's decision.
 - **New rule.** Test fixtures use synthetic identifiers only, never values copied from the data.
+
+---
+
+## 2026-11-15 (continued): pass 1 on the 522-record random sample is complete
+
+### Batches
+Every batch was exported with `export --pass 1 --subset sample` (size 25, and 22 for the last). Preflight passed every time; outputs were compiled and validated, then frozen. The reviewer model was `claude-opus-5-5`, the protocol `ai_review_protocol_v1` and the taxonomy **v1.0**.
+
+| Batch | Records | Membership | Validation | Issues |
+|---|---|---|---|---|
+| P1-B0018 | 25 (STORMWATER / STREETLIGHT) | 22 SAMPLE, 3 SAMPLE_AND_FLAG | VALIDATED on the first attempt | none |
+| P1-B0019 | 25 (STREETLIGHT / TRAFFIC_SAFETY) | 24 SAMPLE, 1 SAMPLE_AND_FLAG | VALIDATED on the first attempt | none |
+| P1-B0020 | 25 (TRAFFIC_SAFETY / WATER_SUPPLY) | 24 SAMPLE, 1 SAMPLE_AND_FLAG | VALIDATED on the first attempt | none |
+| P1-B0021 | 22 (WATER_SUPPLY) | 22 SAMPLE | VALIDATED on the first attempt | none |
+
+In these 97 records: ACCEPT 37, ACCEPT_WITH_MINOR_ISSUES 45, RELABEL 4, AMBIGUOUS 5, REJECT 6. Fidelity: PASS 67, PARTIAL 30. Privacy: NO_OBVIOUS_PII 75, POTENTIAL_PII 6, PII_IDENTIFIED 16.
+
+### Completion audit (independent of the export code)
+- **21 pass-1 batches** (P1-B0001 to P1-B0021), all `VALIDATED`. For every batch, the output SHA-256 matches its frozen manifest and the output record set matches the manifest.
+- **522 records reviewed, 522 unique.** All 522 are in the stratified random sample, which is 522 of 522 covered.
+- **0 flagged-only records** were reviewed. 42 sample records are also flagged; each is counted once, as a sample record.
+- **Taxonomy.**
+  - P1-B0017 to P1-B0021 record `taxonomy_version: "1.0"` in their manifests.
+  - P1-B0001 to P1-B0016 predate version recording. `configs/taxonomy_mapping_provisional_v1.json` was last changed in `ea18dae` (2026-10-31), before P1-B0001 was exported (2026-11-15T16:46Z), so every pass-1 batch used v1.0.
+  - The v1.0 file is unchanged in the working tree, and v1.1 was not applied.
+- Every review row records the reviewer model `claude-opus-5-5` and the protocol `ai_review_protocol_v1`.
+
+### Pass-1 tally for the full sample (n = 522; descriptive, unweighted, pass 1 only, not a population estimate)
+- **Decisions:** ACCEPT 135, ACCEPT_WITH_MINOR_ISSUES 248, RELABEL 81, AMBIGUOUS 29, REJECT 29.
+- **Fidelity:** PASS 305, PARTIAL 211, FAIL 6.
+- **Privacy:** NO_OBVIOUS_PII 453, POTENTIAL_PII 27, PII_IDENTIFIED 40, UNCERTAIN 2.
+
+Weighted estimates come only after pass 2, adjudication and the statistics validation.
+
+### Conventions applied in these batches (from the existing protocol, not new rules)
+- **Private vehicle registrations** → PII_IDENTIFIED (protocol §5). An auto-rickshaw (commercial) plate alone → POTENTIAL_PII, as in earlier batches.
+- **Plate-only traffic reports** (no helmet, wrong parking) keep their content decision and get `error_type=PII`, or `MULTI_ISSUE` when there is also a translation error, and are quarantined by the privacy rule.
+- **A water-connection RR number** is treated like other account or reference numbers → POTENTIAL_PII.
+- **An inverted main claim is REJECTED with TRANSLATION_MEANING_SHIFT.** Examples: "Irregular water supply" → "regular water supply" (BG-TEL-04518); "paying property taxes since 2006" → "not paying" (BG-TEL-02038).
+- **A sensitive case.** BG-TEL-08122 names the complainant and the accused, and the complainant explicitly asks for their name not to be disclosed for fear of violence. It is PII_IDENTIFIED, REJECTED for translation failure, and must never appear in any released or training data.
+- **More place-name mistranslations:**
+  - "Cross" → crucifix (శిలువ) in 3 more records;
+  - "Prestige Palms" → prestigious palms of the hand;
+  - "Jakkur Plantation" → Jakkur gardens.
+
+### Scope kept
+- No pass 2, no flagged-only records, no v1.1 and no dataset v3.
+- No ML training, and no LaBSE or other model download.
+- No changes to the protocol, the original dataset or any frozen batch.
+- No changes to Git history.
+
+### Next (each step needs user approval)
+- Taxonomy decision (v1.0 or v1.1).
+- Acceptance of the isolation mechanism for pass 2.
+- If v1.1 is approved, reassessment of the 29 affected records.
+- Then blind pass 2 on all 522 sample records.
